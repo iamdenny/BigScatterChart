@@ -22,7 +22,15 @@ var BigScatterChart = $.Class({
 				'Failed' : '#d62728' // the order is asc, 
 			},
 			'sPrefix' : 'bigscatterchart-',
-			'nZIndexForCanvas' : 0
+			'nZIndexForCanvas' : 0,
+			'fXAxisFormat' : function(nXStep, i){
+				var nMilliseconds = (nXStep * i + this._nXMin),
+					sDate = new Date(nMilliseconds).toString("HH:mm");
+				return sDate; 
+			},
+			'fYAxisFormat' : function(nYStep, i){
+				return this._addComma((this._nYMax + this._nYMin) - ((nYStep*i) + this._nYMin));
+			}
 		});
 		this.option(htOption);
 			
@@ -435,17 +443,24 @@ var BigScatterChart = $.Class({
 		if(_.isNumber(nYMin)){ this._nYMin = this.option('nYMin', nYMin); }
 		if(_.isNumber(nYMin)){ this._nYMax = this.option('nYMax', nYMax); }
 		
-		var nXStep = (this._nXMax - this._nXMin) / this.option('nXSteps');
+		var fXAxisFormat = this.option('fXAxisFormat'),
+			nXStep = (this._nXMax - this._nXMin) / this.option('nXSteps');
 		_.each(this._nXNumbers, function(el, i){
-			// el.set('text', (xstep * i + this.xmin).round()); 
-			var milliseconds = (nXStep * i + this._nXMin); 
-			var date = new Date(milliseconds).toString("HH:mm");
-			el.text(date); 
+			if(_.isFunction(fXAxisFormat)){
+				el.text(fXAxisFormat.call(this, nXStep, i));
+			}else{
+				el.text((xstep * i + this._nXMin).round());
+			}
 		}, this);
 		
-		var nYStep = (this._nYMax - this._nYMin) / this.option('nYSteps');
+		var fYAxisFormat = this.option('fYAxisFormat'),
+			nYStep = (this._nYMax - this._nYMin) / this.option('nYSteps');
 		_.each(this._nYNumbers, function(el, i){
-			el.text(this._addComma((this._nYMax + this._nYMin) - ((nYStep*i) + this._nYMin))); 
+			if(_.isFunction(fXAxisFormat)){
+				el.text(fYAxisFormat.call(this, nYStep, i));
+			}else{
+				el.text(this._addComma((this._nYMax + this._nYMin) - ((nYStep*i) + this._nYMin)));
+			}
 		}, this)
 	},	
 
