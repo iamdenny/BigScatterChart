@@ -1,0 +1,9 @@
+.bigscatterchart-placeholder{
+	display:inline-block;
+	border:1px solid #369;
+	background:#def;
+	width:50px;
+	padding:0;
+	margin:0 10px;
+	opacity: 0.3;
+}
