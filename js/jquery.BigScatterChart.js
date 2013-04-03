@@ -19,7 +19,7 @@ var BigScatterChart = $.Class({
 			'sLineColor' : '#000',			
 			'htTypeAndColor' : {
 				'Success' : '#2ca02c', // type name : color
-				'Failed' : '#d62728'
+				'Failed' : '#d62728' // the order is asc, 
 			},
 			'sPrefix' : 'bigscatterchart-',
 			'nZIndexForCanvas' : 0
@@ -30,7 +30,7 @@ var BigScatterChart = $.Class({
 		this._initElements();
 		this._initEvents();
 		this._drawXYAxis();
-		this._updateXYAxis();
+		this.updateXYAxis();
 	},
 
 	_initVariables : function(){		
@@ -429,7 +429,11 @@ var BigScatterChart = $.Class({
 		}
 	},
 
-	_updateXYAxis: function() {
+	updateXYAxis: function(nXMin, nXMax, nYMin, nYMax) {
+		if(_.isNumber(nXMin)){ this._nXMin = this.option('nXMin', nXMin); }
+		if(_.isNumber(nXMax)){ this._nXMax = this.option('nXMin', nXMax); }
+		if(_.isNumber(nYMin)){ this._nYMin = this.option('nYMin', nYMin); }
+		if(_.isNumber(nYMin)){ this._nYMax = this.option('nYMax', nYMax); }
 		
 		var nXStep = (this._nXMax - this._nXMin) / this.option('nXSteps');
 		_.each(this._nXNumbers, function(el, i){
@@ -529,7 +533,7 @@ var BigScatterChart = $.Class({
 	redrawBubbles : function() {	
 		this._recountAllPerType();
 		this._showTypeCount();		
-		this._updateXYAxis();
+		this.updateXYAxis();
 
 		for(var i=0, nLen = this._aBubbles.length; i<nLen; i++){
 			this._drawBubbules(this._aBubbles[i]);
@@ -637,7 +641,7 @@ var BigScatterChart = $.Class({
 		this.addBubbles(aBubbles);
 		this._drawBubbules(aBubbles); // 평균 33 ~ 45 ms 걸림
 		//this.redrawBubbles(); // 평균 2629 ~ 3526 ms 걸림, 90~100배 차이
-		this._updateXYAxis();
+		this.updateXYAxis();
 
 		// _drawBubbules: 35.000ms 
 		// _drawBubbules: 44.000ms 

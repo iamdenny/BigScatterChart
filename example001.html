@@ -24,8 +24,9 @@
 			if(Modernizr.canvas){
 				doBigScatterChart();
 			}
+			var oScatterChart;
 			function doBigScatterChart(){
-				var oScatterChart = new BigScatterChart({
+				oScatterChart = new BigScatterChart({
 					sContainerId : 'chart1',
 					nWidth : 800,
 					nHeight : 600,
