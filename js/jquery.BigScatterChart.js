@@ -248,7 +248,7 @@ var BigScatterChart = $.Class({
 			}
 		});
 
-		this._initTypeCount();
+		_initTypeCount();
 	},
 
 	_initEvents : function(){
@@ -823,6 +823,5 @@ var BigScatterChart = $.Class({
 		delete this._aBubbles;
 		delete this._aBubbleStep;
 		delete this;
-		//this = null;
 	}
 });
