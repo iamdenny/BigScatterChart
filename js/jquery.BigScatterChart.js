@@ -555,7 +555,7 @@ var BigScatterChart = $.Class({
 		}
 	},	
 
-	_clearChart : function(){
+	clear : function(){
 		var nPaddingLeft = this.option('nPaddingLeft'),
 			nPaddingBottom = this.option('nPaddingBottom'),
 			nWidth = this.option('nWidth'),
