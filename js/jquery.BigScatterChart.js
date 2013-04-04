@@ -29,6 +29,7 @@ var BigScatterChart = $.Class({
 				return sDate; 
 			},
 			'fYAxisFormat' : function(nYStep, i){
+				console.log(nYStep, i);
 				return this._addComma((this._nYMax + this._nYMin) - ((nYStep*i) + this._nYMin));
 			}
 		});
@@ -589,7 +590,7 @@ var BigScatterChart = $.Class({
 		for(var i = 0, nLen = aBubbles.length; i < nLen; i++) {
 			var x = this._parseXDataToXChart(aBubbles[i].x),
 				y = this._parseYDataToYChart(aBubbles[i].y),
-				z = this._parseZDataToZChart(aBubbles[i].z),
+				r = this._parseZDataToZChart(aBubbles[i].r),
 				a = aBubbles[i].y / this._nYMax * 0.7,
 				sThisType = aBubbles[i].type;
 		
@@ -597,12 +598,12 @@ var BigScatterChart = $.Class({
 			// this._htOcharTctx[sThisType].globalAlpha = 0.8;
 			this._htOcharTctx[sThisType].fillStyle = htTypeAndColor[sThisType];
 			this._htOcharTctx[sThisType].strokeStyle = htTypeAndColor[sThisType];
-			this._htOcharTctx[sThisType].arc(x, y, z, 0, Math.PI * 2, true);
+			this._htOcharTctx[sThisType].arc(x, y, r, 0, Math.PI * 2, true);
 			this._htOcharTctx[sThisType].globalAlpha = 0.3 + a;			
 			//this._htOcharTctx[sThisType].stroke();
 			this._htOcharTctx[sThisType].fill();
 			
-			aBubbles[i].realx = x; aBubbles[i].realy = y; aBubbles[i].realz = z;
+			aBubbles[i].realx = x; aBubbles[i].realy = y; aBubbles[i].realz = r;
 		}		
 	},
 
@@ -683,7 +684,7 @@ var BigScatterChart = $.Class({
 		// 여기서 조금 느려질 수 있다.
 		// 하지만 그리는데 지장이 없기에 괜찮을 것 같다.
 		// 워커를 사용하였지만, 전체 배열을 주고 받는 시간도 오래걸린다 
-		var aBubbles = this._aBubbles,
+		var aBubbles = this._aBubbles || [],
 			aIndexToBeRemoved = [],
 			htType = this.option('htTypeAndColor');
 
@@ -809,5 +810,13 @@ var BigScatterChart = $.Class({
 		}
 		// console.timeEnd('getDataByXY');
 		return aData;
+	},
+
+	destroy : function(){
+		this._welContainer.empty();
+		delete this._aBubbles;
+		delete this._aBubbleStep;
+		delete this;
+		//this = null;
 	}
 });

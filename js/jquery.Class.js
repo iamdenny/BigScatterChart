@@ -350,8 +350,7 @@ class Inheritance{
 				}
 				// set
 				if(typeof value !== "undefined"){
-					this.htOption[key] = value;
-					return;
+					return this.htOption[key] = value;
 				}
 				// get
 				if(typeof key === "string"){
