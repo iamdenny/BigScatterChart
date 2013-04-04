@@ -495,11 +495,7 @@ var BigScatterChart = $.Class({
 
 	_countPerType : function(aBubbles){
 		var aBubbles = aBubbles,
-			htTypeCount = {};
-		var htType = this.option('htTypeAndColor');
-		_.each(htType, function(sVal, sKey){
-			htTypeCount[sKey] = 0;
-		}, this);			
+			htTypeCount = {};		
 
 		if(_.isArray(aBubbles) && aBubbles.length > 0){
 			for(var i=0, nLen=aBubbles.length; i<nLen; i++){
@@ -572,6 +568,9 @@ var BigScatterChart = $.Class({
 		_.each(htType, function(sVal, sKey){
 			this._htOcharTctx[sKey].clearRect(nPaddingLeft + 2, 0, nWidth, nHeight - (nPaddingBottom + 2));
 		}, this);		
+		this._initTypeCount();
+		this._aBubbles = [];
+		this._aBubbleStep = [];
 	},
 
 	addBubbleAndDraw : function(aBubbles){
