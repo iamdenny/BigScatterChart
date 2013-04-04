@@ -112,7 +112,7 @@ function drawScatter(title, start, end, targetId) {
 	
 	oScatterChart = new BigScatterChart({
 		sContainerId : 'scatterchart',
-		nWidth : 500,
+		nWidth : 382,
 		nHeight : 400,
 		// nXMin: date.getTime() - 86400000, nXMax: date.getTime(),
 		nXMin: start, nXMax: end,

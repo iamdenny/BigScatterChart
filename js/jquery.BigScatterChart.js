@@ -247,6 +247,8 @@ var BigScatterChart = $.Class({
         		}
 			}
 		});
+
+		this._initTypeCount();
 	},
 
 	_initEvents : function(){
@@ -510,14 +512,18 @@ var BigScatterChart = $.Class({
 		return htTypeCount;
 	},
 
-	_recountAllPerType : function(){
-		var aBubbles = this._aBubbles;
-
+	_initTypeCount : function(){
 		this._htTypeCount = {};
 		var htType = this.option('htTypeAndColor');
 		_.each(htType, function(sVal, sKey){
 			this._htTypeCount[sKey] = 0;
 		}, this);
+	},
+
+	_recountAllPerType : function(){
+		var aBubbles = this._aBubbles;
+
+		this._initTypeCount();
 
 		for(var i=0, nLen=aBubbles.length; i<nLen; i++){
 			for(var j=0, nLen2=aBubbles[i].length; j<nLen2; j++){
