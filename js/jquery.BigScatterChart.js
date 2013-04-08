@@ -29,7 +29,6 @@ var BigScatterChart = $.Class({
 				return sDate; 
 			},
 			'fYAxisFormat' : function(nYStep, i){
-				console.log(nYStep, i);
 				return this._addComma((this._nYMax + this._nYMin) - ((nYStep*i) + this._nYMin));
 			}
 		});
@@ -499,6 +498,9 @@ var BigScatterChart = $.Class({
 
 		if(_.isArray(aBubbles) && aBubbles.length > 0){
 			for(var i=0, nLen=aBubbles.length; i<nLen; i++){
+				if(_.isNumber(htTypeCount[aBubbles[i].type]) === false){
+					htTypeCount[aBubbles[i].type] = 0;
+				}
 				htTypeCount[aBubbles[i].type] += 1;
 			}
 		}
