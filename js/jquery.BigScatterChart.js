@@ -123,7 +123,7 @@ var BigScatterChart = $.Class({
 
 		// plot chart for bubbles
 		this._htwelChartCanvas = {};
-		this._htOcharTctx = {};		
+		this._htBubbleCtx = {};		
 		_.each(htType, function(sVal, sKey){
 			this._htwelChartCanvas[sKey] = $('<canvas>')
 				.addClass(sPrefix+sKey)
@@ -135,7 +135,7 @@ var BigScatterChart = $.Class({
 					'top' : 0,
 					'z-index' : nZIndexForCanvas++
 				}).appendTo(this._welContainer);
-			this._htOcharTctx[sKey] = this._htwelChartCanvas[sKey].get(0).getContext('2d');
+			this._htBubbleCtx[sKey] = this._htwelChartCanvas[sKey].get(0).getContext('2d');
 		}, this);
 
 		// overlay for all the labels
@@ -474,6 +474,7 @@ var BigScatterChart = $.Class({
 	},
 
 	addBubbles : function(aBubbles, htTypeCount){
+		if(_.isArray(this._aBubbles) === false) return;
 		this._aBubbles.push(aBubbles);
 		var htTypeCount = htTypeCount || this._countPerType(aBubbles);
 		var htBubble = {
@@ -568,7 +569,7 @@ var BigScatterChart = $.Class({
 			htType = this.option('htTypeAndColor');
 
 		_.each(htType, function(sVal, sKey){
-			this._htOcharTctx[sKey].clearRect(nPaddingLeft + 2, 0, nWidth, nHeight - (nPaddingBottom + 2));
+			this._htBubbleCtx[sKey].clearRect(nPaddingLeft + 2, 0, nWidth, nHeight - (nPaddingBottom + 2));
 		}, this);		
 		this._initTypeCount();
 		this._aBubbles = [];
@@ -601,14 +602,14 @@ var BigScatterChart = $.Class({
 				a = aBubbles[i].y / this._nYMax * 0.7,
 				sThisType = aBubbles[i].type;
 		
-			this._htOcharTctx[sThisType].beginPath();
-			// this._htOcharTctx[sThisType].globalAlpha = 0.8;
-			this._htOcharTctx[sThisType].fillStyle = htTypeAndColor[sThisType];
-			this._htOcharTctx[sThisType].strokeStyle = htTypeAndColor[sThisType];
-			this._htOcharTctx[sThisType].arc(x, y, r, 0, Math.PI * 2, true);
-			this._htOcharTctx[sThisType].globalAlpha = 0.3 + a;			
-			//this._htOcharTctx[sThisType].stroke();
-			this._htOcharTctx[sThisType].fill();
+			this._htBubbleCtx[sThisType].beginPath();
+			// this._htBubbleCtx[sThisType].globalAlpha = 0.8;
+			this._htBubbleCtx[sThisType].fillStyle = htTypeAndColor[sThisType];
+			this._htBubbleCtx[sThisType].strokeStyle = htTypeAndColor[sThisType];
+			this._htBubbleCtx[sThisType].arc(x, y, r, 0, Math.PI * 2, true);
+			this._htBubbleCtx[sThisType].globalAlpha = 0.3 + a;			
+			//this._htBubbleCtx[sThisType].stroke();
+			this._htBubbleCtx[sThisType].fill();
 			
 			aBubbles[i].realx = x; aBubbles[i].realy = y; aBubbles[i].realz = r;
 		}		
@@ -736,8 +737,8 @@ var BigScatterChart = $.Class({
 			htType = this.option('htTypeAndColor');
 
 		_.each(htType, function(sVal, sKey){
-			var aImgData = this._htOcharTctx[sKey].getImageData(x, y, width, height);
-			this._htOcharTctx[sKey].putImageData(aImgData, nPaddingLeft+nBubbleSize, 0);
+			var aImgData = this._htBubbleCtx[sKey].getImageData(x, y, width, height);
+			this._htBubbleCtx[sKey].putImageData(aImgData, nPaddingLeft+nBubbleSize, 0);
 		}, this);		
 	},
 
@@ -821,8 +822,31 @@ var BigScatterChart = $.Class({
 
 	destroy : function(){
 		this._welContainer.empty();
+		delete this._welTypeUl;
 		delete this._aBubbles;
 		delete this._aBubbleStep;
-		delete this;
+		delete this._htBubbleCtx;
+		delete this._htTypeCount;
+		delete this._htwelChartCanvas;
+		delete this._htwelTypeLi;
+		delete this._htwelTypeSpan;
+		delete this._nXMax;
+		delete this._nXMin;
+		delete this._nXNumbers;
+		delete this._nXWork;
+		delete this._nYMax;
+		delete this._nYMin;
+		delete this._nYNumbers;
+		delete this._nYWork;
+		delete this._nZMax;
+		delete this._nZMin;
+		delete this._oGuideCtx;
+		delete this._welContainer;
+		delete this._welGuideCanvas;
+		delete this._welOverlay;
+		delete this._welTypeUlv
+		// delete this.htOption;
+		// delete this.__proto__;
+		// delete this;
 	}
 });
