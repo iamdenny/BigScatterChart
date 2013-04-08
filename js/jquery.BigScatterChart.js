@@ -247,7 +247,7 @@ var BigScatterChart = $.Class({
 			}
 		});
 
-		this._initTypeCount();
+		this._resetTypeCount();
 	},
 
 	_initEvents : function(){
@@ -511,7 +511,7 @@ var BigScatterChart = $.Class({
 		return htTypeCount;
 	},
 
-	_initTypeCount : function(){
+	_resetTypeCount : function(){
 		this._htTypeCount = {};
 		var htType = this.option('htTypeAndColor');
 		_.each(htType, function(sVal, sKey){
@@ -522,7 +522,7 @@ var BigScatterChart = $.Class({
 	_recountAllPerType : function(){
 		var aBubbles = this._aBubbles;
 
-		this._initTypeCount();
+		this._resetTypeCount();
 
 		for(var i=0, nLen=aBubbles.length; i<nLen; i++){
 			for(var j=0, nLen2=aBubbles[i].length; j<nLen2; j++){
@@ -571,7 +571,7 @@ var BigScatterChart = $.Class({
 		_.each(htType, function(sVal, sKey){
 			this._htBubbleCtx[sKey].clearRect(nPaddingLeft + 2, 0, nWidth, nHeight - (nPaddingBottom + 2));
 		}, this);		
-		this._initTypeCount();
+		this._resetTypeCount();
 		this._aBubbles = [];
 		this._aBubbleStep = [];
 	},
@@ -663,6 +663,7 @@ var BigScatterChart = $.Class({
 			this._removeOldDataLessThan(this._nXMin);
 		}		
 		this.addBubbles(aBubbles);
+		this._showTypeCount();
 		this._drawBubbules(aBubbles); // 평균 33 ~ 45 ms 걸림
 		//this.redrawBubbles(); // 평균 2629 ~ 3526 ms 걸림, 90~100배 차이
 		this.updateXYAxis();
