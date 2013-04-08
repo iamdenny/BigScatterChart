@@ -248,7 +248,7 @@ var BigScatterChart = $.Class({
 			}
 		});
 
-		_initTypeCount();
+		this._initTypeCount();
 	},
 
 	_initEvents : function(){
