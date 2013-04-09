@@ -18,8 +18,9 @@ var BigScatterChart = $.Class({
 			'nPaddingLeft' : 50,
 			'sLineColor' : '#000',			
 			'htTypeAndColor' : {
-				'Success' : '#2ca02c', // type name : color
-				'Failed' : '#d62728' // the order is asc, 
+				'Success' : '#b6da54', // type name : color
+				'Warning' : '#fcc666',
+				'Failed' : '#fd7865'
 			},
 			'sPrefix' : 'bigscatterchart-',
 			'nZIndexForCanvas' : 0,
