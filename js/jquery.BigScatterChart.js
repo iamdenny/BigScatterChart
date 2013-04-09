@@ -23,6 +23,11 @@ var BigScatterChart = $.Class({
 			},
 			'sPrefix' : 'bigscatterchart-',
 			'nZIndexForCanvas' : 0,
+			'htGuideLine' : {
+				'nLineWidth' : 1,
+				'aLineDash' : [2, 5],
+				'nGlobalAlpha' : 0.2
+			},
 			'fXAxisFormat' : function(nXStep, i){
 				var nMilliseconds = (nXStep * i + this._nXMin),
 					sDate = new Date(nMilliseconds).toString("HH:mm");
@@ -384,7 +389,8 @@ var BigScatterChart = $.Class({
 			nBubbleSize = this.option('nBubbleSize'),
 			nWidth = this.option('nWidth'),
 			nHeight = this.option('nHeight'),
-			sLineColor = this.option('sLineColor');
+			sLineColor = this.option('sLineColor'),
+			htGuideLine = this.option('htGuideLine');
 
 		this._oGuideCtx.lineWidth = 2;
 		this._oGuideCtx.lineCap = 'round';
@@ -400,7 +406,7 @@ var BigScatterChart = $.Class({
 
 		for(var i=0; i<=this.option('nXSteps'); i++){
 			var mov = nPaddingLeft + nBubbleSize + nXStep * i;
-			this._oGuideCtx.lineWidth = 1;
+			this._oGuideCtx.lineWidth = htGuideLine.nLineWidth;
 			this._oGuideCtx.setLineDash([0]);
 			this._oGuideCtx.globalAlpha = 1;
 	  		this._oGuideCtx.beginPath();
@@ -409,9 +415,9 @@ var BigScatterChart = $.Class({
 			this._oGuideCtx.stroke();
 
 			// x 축 가이드라인
-			this._oGuideCtx.lineWidth = 1;
-			this._oGuideCtx.setLineDash([2,5]);
-			this._oGuideCtx.globalAlpha = 0.2;
+			this._oGuideCtx.lineWidth = htGuideLine.nLineWidth;
+			this._oGuideCtx.setLineDash(htGuideLine.aLineDash);
+			this._oGuideCtx.globalAlpha = htGuideLine.nGlobalAlpha;
 			this._oGuideCtx.beginPath();
 			this._oGuideCtx.moveTo(mov, nPaddingTop);
 			this._oGuideCtx.lineTo(mov, nHeight - nPaddingBottom);
@@ -420,7 +426,7 @@ var BigScatterChart = $.Class({
 
 		for(var i=0; i<=this.option('nYSteps'); i++){
 			var mov = nHeight - (nPaddingBottom + nBubbleSize + nYStep * i);
-			this._oGuideCtx.lineWidth = 1;
+			this._oGuideCtx.lineWidth = htGuideLine.nLineWidth;
 			this._oGuideCtx.setLineDash([0]);
 			this._oGuideCtx.globalAlpha = 1;			
 			this._oGuideCtx.beginPath();
@@ -429,9 +435,9 @@ var BigScatterChart = $.Class({
 			this._oGuideCtx.stroke();
 
 			// y 축 가이드라인
-			this._oGuideCtx.lineWidth = 1;
-			this._oGuideCtx.setLineDash([2,5]);
-			this._oGuideCtx.globalAlpha = 0.2;
+			this._oGuideCtx.lineWidth = htGuideLine.nLineWidth;
+			this._oGuideCtx.setLineDash(htGuideLine.aLineDash);
+			this._oGuideCtx.globalAlpha = htGuideLine.nGlobalAlpha;
 			this._oGuideCtx.beginPath();
 			this._oGuideCtx.moveTo(nPaddingLeft, mov);
 			this._oGuideCtx.lineTo(nWidth - nPaddingRight, mov);			
