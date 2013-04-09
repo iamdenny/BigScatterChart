@@ -1,4 +1,4 @@
 BigScatterChart
 ===============
 
-Big Scatter Chart based on javascript and html5
+Demo : http://BigScatterChart.iamdenny.com
