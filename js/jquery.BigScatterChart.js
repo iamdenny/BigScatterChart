@@ -642,8 +642,10 @@ var BigScatterChart = $.Class({
 			this._htBubbleCtx[sKey].clearRect(nPaddingLeft + 2, 0, nWidth, nHeight - (nPaddingBottom + 2));
 		}, this);		
 		this._resetTypeCount();
+		this._showTypeCount();
 		this._aBubbles = [];
 		this._aBubbleStep = [];
+		this._showNoData();
 	},
 
 	addBubbleAndDraw : function(aBubbles){
@@ -900,7 +902,7 @@ var BigScatterChart = $.Class({
 		this._welShowNoData.hide();
 	},
 
-	showNoData : function(){
+	_showNoData : function(){
 		this._welShowNoData.show();
 	},
 
