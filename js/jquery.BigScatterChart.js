@@ -29,6 +29,8 @@ var BigScatterChart = $.Class({
 				'aLineDash' : [2, 5],
 				'nGlobalAlpha' : 0.2
 			},
+			'sXLabel' : '',
+			'sYLabel' : '',
 			'fXAxisFormat' : function(nXStep, i){
 				var nMilliseconds = (nXStep * i + this._nXMin),
 					sDate = new Date(nMilliseconds).toString("HH:mm");
@@ -187,12 +189,49 @@ var BigScatterChart = $.Class({
 					'text-align': 'right',
 					'top': (nBubbleSize + (i * nYStep) + nPaddingTop - 10) + 'px',
 					'left': '0px',
-					'color': '#000'
+					'color': sLineColor
 				})
 			);
 		}
 		this._welOverlay.append(this._nXNumbers);
 		this._welOverlay.append(this._nYNumbers);	
+
+		// sXLabel
+		var sXLabel = this.option('sXLabel');
+		if(_.isString(sXLabel) && sXLabel.length > 0){
+			this._welOverlay.append($('<div>')
+									.text(sXLabel)
+									.css({
+										'position': 'absolute',
+										'font-size': '10px',
+										'line-height': '20px',
+										'height': '20px',
+										'text-align': 'center',
+										'top': (nHeight - nPaddingBottom + 10) + 'px',
+										'right': 0,
+										'color': sLineColor
+									})
+			);
+		}		
+
+		// sYLabel
+		var sYLabel = this.option('sYLabel');
+		if(_.isString(sYLabel) && sYLabel.length > 0){
+			this._welOverlay.append($('<div>')
+									.text(sYLabel)
+									.css({
+										'position' : 'absolute',
+										'font-size' : '10px',
+										'line-height' : '20px',
+										'vertical-align' : 'middle',
+										'width': (nPaddingLeft - 15) + 'px',
+										'text-align': 'right',
+										'top': (nBubbleSize + nPaddingTop + 10) + 'px',
+										'left': '0px',
+										'color': sLineColor
+									})
+			);
+		}
 		
 		// count per type to show up
 		this._welTypeUl = $('<ul>')
