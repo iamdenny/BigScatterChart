@@ -317,6 +317,7 @@ jQuery.fn.dragToSelect = function (conf) {
 	// 	parent.disableTextSelect();
 	// }
 
+	var bIsDraging = false;
 	parent
 		.mousedown(function (e) {
 			// Make sure user isn't clicking scrollbar (or disallow clicks far to the right actually)
@@ -324,11 +325,14 @@ jQuery.fn.dragToSelect = function (conf) {
 				return;
 			}
 
+			bIsDraging = true;
+
 			showSelectBox(e);
 
 			e.preventDefault();
 		});
 	jQuery(document).mousemove(function (e) {
+			if(!bIsDraging) return;
 			refreshSelectBox(e);
 
 			if (config.selectables && config.selectOnMove) {			
@@ -342,9 +346,12 @@ jQuery.fn.dragToSelect = function (conf) {
 			e.preventDefault();
 		})
 		.mouseup(function (e) {
+			if(!bIsDraging) return;
 			if (config.selectables) {			
 				selectElementsInRange();
 			}
+
+			bIsDraging = false;
 
 			hideSelectBox(e);
 
