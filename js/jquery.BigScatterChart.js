@@ -20,7 +20,8 @@ var BigScatterChart = $.Class({
 			'htTypeAndColor' : {
 				'Success' : '#b6da54', // type name : color
 				'Warning' : '#fcc666',
-				'Failed' : '#fd7865'
+				'Failed' : '#fd7865',
+				'Others' : '#55c7c7'
 			},
 			'sPrefix' : 'bigscatterchart-',
 			'nZIndexForCanvas' : 0,
