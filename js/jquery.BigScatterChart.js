@@ -639,7 +639,7 @@ var BigScatterChart = $.Class({
 			htType = this.option('htTypeAndColor');
 
 		_.each(htType, function(sVal, sKey){
-			this._htBubbleCtx[sKey].clearRect(nPaddingLeft + 2, 0, nWidth, nHeight - (nPaddingBottom + 2));
+			this._htBubbleCtx[sKey].clearRect(0, 0, nWidth, nHeight);
 		}, this);		
 		this._resetTypeCount();
 		this._showTypeCount();
