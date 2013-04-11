@@ -36,6 +36,12 @@ var BigScatterChart = $.Class({
 				'line-height': '20px',
 				'height': '20px',
 			},
+			'sShowNoData' : 'No Data',
+			'htShowNoDataStyle' : {
+				'font-size' : '15px',
+				'color' : '#000',
+				'font-weight' : 'bold'
+			},
 			'fXAxisFormat' : function(nXStep, i){
 				var nMilliseconds = (nXStep * i + this._nXMin),
 					sDate = new Date(nMilliseconds).toString("HH:mm");
@@ -231,6 +237,20 @@ var BigScatterChart = $.Class({
 									})
 			);
 		}
+
+		// sShowNoData
+		var sShowNoData = this.option('sShowNoData'),
+			htShowNoDataStyle = this.option('htShowNoDataStyle');
+		this._welShowNoData = $('<div>')
+								.text(sShowNoData)
+								.css(htShowNoDataStyle)
+								.css({
+									'position' : 'absolute',
+									'top' : nHeight/2 + 'px',
+									'width' : '100%',
+									'text-align' : 'center'								
+								});
+		this._welOverlay.append(this._welShowNoData);
 		
 		// count per type to show up
 		this._welTypeUl = $('<ul>')
@@ -601,6 +621,10 @@ var BigScatterChart = $.Class({
 		this._showTypeCount();		
 		this.updateXYAxis();
 
+		if(this._aBubbles.length > 0){
+			this._hideNoData();	
+		}
+		
 		for(var i=0, nLen = this._aBubbles.length; i<nLen; i++){
 			this._drawBubbules(this._aBubbles[i]);
 		}
@@ -625,6 +649,9 @@ var BigScatterChart = $.Class({
 		if(_.isArray(aBubbles) === false || aBubbles.length === 0){
 			return;
 		}
+		if(aBubbles.length > 0){
+			this._hideNoData();	
+		}		
 
 		this.addBubbles(aBubbles);
 		this._showTypeCount();	
@@ -696,6 +723,8 @@ var BigScatterChart = $.Class({
 
 		if(_.isArray(aBubbles) === false || aBubbles.length === 0){
 			return;
+		}else{
+			this._hideNoData();
 		}
 		if(nXMax > this._nXMax){
 			var nXGap = nXMax - this._nXMax;
@@ -864,6 +893,14 @@ var BigScatterChart = $.Class({
 		}
 		// console.timeEnd('getDataByXY');
 		return aData;
+	},
+
+	_hideNoData : function(){
+		this._welShowNoData.hide();
+	},
+
+	showNoData : function(){
+		this._welShowNoData.show();
 	},
 
 	destroy : function(){
