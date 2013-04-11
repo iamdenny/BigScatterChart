@@ -85,13 +85,17 @@ jQuery.fn.dragToSelect = function (conf) {
 		return this;
 	}
 
-	var parentOffset	= parent.offset();
-	var parentDim		= {
-		left:	parentOffset.left, 
-		top:	parentOffset.top, 
-		width:	parent.width(), 
-		height:	parent.height()
-	};
+	var parentOffset, parentDim;
+	jQuery(window).resize(function(){
+		parentOffset	= parent.offset();
+		parentDim		= {
+			left:	parentOffset.left, 
+			top:	parentOffset.top, 
+			width:	parent.width(), 
+			height:	parent.height()
+		};
+	});
+	jQuery(window).trigger('resize');
 
 	// Current origin of select box
 	var selectBoxOrigin = {
@@ -354,6 +358,7 @@ jQuery.fn.dragToSelect = function (conf) {
 			bIsDraging = false;
 
 			hideSelectBox(e);
+			// console.log('e', e);
 
 			e.preventDefault();
 		});
