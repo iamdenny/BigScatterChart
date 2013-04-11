@@ -107,13 +107,15 @@ jQuery.fn.dragToSelect = function (conf) {
 	var selectBox = jQuery('<div/>')
 						.appendTo(parent)
 						.attr('class', config.className)
-						.css('position', 'absolute');
+						.css('position', 'absolute')
+						.hide();
 
 	// Shows the select box
 	var showSelectBox = function (e) {
 		if (parent.is('.' + config.disabledClass)) {
 			return;
 		}
+		selectBox.show();
 
 		selectBoxOrigin.left	= e.pageX - parentDim.left + parent[0].scrollLeft;
 		selectBoxOrigin.top		= e.pageY - parentDim.top + parent[0].scrollTop;
