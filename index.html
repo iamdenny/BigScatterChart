@@ -36,10 +36,13 @@
 					nZMin: 0, nZMax: 5,
 					nBubbleSize: 3,
 					htTypeAndColor : {
-						'Success' : '#2ca02c', // type name : color
-						'Warning' : '#f5d025',
-						'Failed' : '#d62728'
+						'Success' : '#b6da54', // type name : color
+						'Warning' : '#fcc666',
+						'Failed' : '#fd7865',
+						'Others' : '#55c7c7'
 					},
+					sXLabel : '(time)',
+					sYLabel : '(ms)',
 					fOnSelect : function(htPosition, htXY){
 						console.log('fOnSelect', htPosition, htXY);
 						console.time('fOnSelect');
@@ -55,8 +58,8 @@
 					data.push({
 						x : i,
 						y : Math.round(_.random(0, 10000) / _.random(1, 1000)),
-						r : 1,
-						type : _.random(0,100) < 95 ? 'Success' : (_.random(0,100) < 95 ? 'Failed' : 'Warning')
+						r : 3,
+						type : _.random(0,100) < 80 ? 'Success' : (_.random(0,100) < 80 ? 'Failed' : (_.random(0,100) < 80 ? 'Warning' : 'Others'))
 					});
 				}
 				oScatterChart.setBubbles(data);
@@ -68,8 +71,8 @@
 						data.push({
 							x : i,
 							y : Math.round(_.random(0, 10000) / _.random(1, 1000)),
-							r : 1,
-							type : _.random(0,100) < 95 ? 'Success' : (_.random(0,100) < 95 ? 'Failed' : 'Warning')
+							r : 3,
+							type : _.random(0,100) < 80 ? 'Success' : (_.random(0,100) < 80 ? 'Failed' : (_.random(0,100) < 80 ? 'Warning' : 'Others'))
 						});
 					}
 					oScatterChart.addBubbleAndDraw(data);
@@ -81,8 +84,8 @@
 						data.push({
 							x : i,
 							y : Math.round(_.random(0, 10000) / _.random(1, 1000)),
-							r : 1,
-							type : _.random(0,100) < 95 ? 'Success' : (_.random(0,100) < 95 ? 'Failed' : 'Warning')
+							r : 3,
+							type : _.random(0,100) < 80 ? 'Success' : (_.random(0,100) < 80 ? 'Failed' : (_.random(0,100) < 80 ? 'Warning' : 'Others'))
 						});
 					}
 					oScatterChart.addBubbleAndDraw(data);
@@ -94,8 +97,8 @@
 						data.push({
 							x : i,
 							y : Math.round(_.random(0, 10000) / _.random(1, 1000)),
-							r : 1,
-							type : _.random(0,100) < 95 ? 'Success' : (_.random(0,100) < 95 ? 'Failed' : 'Warning')
+							r : 3,
+							type : _.random(0,100) < 80 ? 'Success' : (_.random(0,100) < 80 ? 'Failed' : (_.random(0,100) < 80 ? 'Warning' : 'Others'))
 						});
 					}
 					oScatterChart.addBubbleAndDraw(data);
@@ -107,8 +110,8 @@
 						data.push({
 							x : i,
 							y : Math.round(_.random(0, 10000) / _.random(1, 1000)),
-							r : 1,
-							type : _.random(0,100) < 95 ? 'Success' : (_.random(0,100) < 95 ? 'Failed' : 'Warning')
+							r : 3,
+							type : _.random(0,100) < 80 ? 'Success' : (_.random(0,100) < 80 ? 'Failed' : (_.random(0,100) < 80 ? 'Warning' : 'Others'))
 						});
 					}
 					oScatterChart.addBubbleAndMoveAndDraw(data, date.getTime() + 3600000);
@@ -120,8 +123,8 @@
 						data.push({
 							x : i,
 							y : Math.round(_.random(0, 10000) / _.random(1, 1000)),
-							r : 1,
-							type : _.random(0,100) < 95 ? 'Success' : (_.random(0,100) < 95 ? 'Failed' : 'Warning')
+							r : 3,
+							type : _.random(0,100) < 80 ? 'Success' : (_.random(0,100) < 80 ? 'Failed' : (_.random(0,100) < 80 ? 'Warning' : 'Others'))
 						});
 					}
 					oScatterChart.addBubbleAndMoveAndDraw(data, date.getTime() + 7200000);
@@ -133,8 +136,8 @@
 						data.push({
 							x : i,
 							y : Math.round(_.random(0, 10000) / _.random(1, 1000)),
-							r : 1,
-							type : _.random(0,100) < 95 ? 'Success' : (_.random(0,100) < 95 ? 'Failed' : 'Warning')
+							r : 3,
+							type : _.random(0,100) < 80 ? 'Success' : (_.random(0,100) < 80 ? 'Failed' : (_.random(0,100) < 80 ? 'Warning' : 'Others'))
 						});
 					}
 					oScatterChart.addBubbleAndMoveAndDraw(data, date.getTime() + 10800000);
@@ -146,8 +149,8 @@
 						data.push({
 							x : i,
 							y : Math.round(_.random(0, 10000) / _.random(1, 1000)),
-							r : 1,
-							type : _.random(0,100) < 95 ? 'Success' : (_.random(0,100) < 95 ? 'Failed' : 'Warning')
+							r : 3,
+							type : _.random(0,100) < 80 ? 'Success' : (_.random(0,100) < 80 ? 'Failed' : (_.random(0,100) < 80 ? 'Warning' : 'Others'))
 						});
 					}
 					oScatterChart.addBubbleAndMoveAndDraw(data, date.getTime() + 14400000);
@@ -159,8 +162,8 @@
 						data.push({
 							x : i,
 							y : Math.round(_.random(0, 10000) / _.random(1, 1000)),
-							r : 1,
-							type : _.random(0,100) < 95 ? 'Success' : (_.random(0,100) < 95 ? 'Failed' : 'Warning')
+							r : 3,
+							type : _.random(0,100) < 80 ? 'Success' : (_.random(0,100) < 80 ? 'Failed' : (_.random(0,100) < 80 ? 'Warning' : 'Others'))
 						});
 					}
 					oScatterChart.addBubbleAndMoveAndDraw(data, date.getTime() + 18000000);
@@ -172,8 +175,8 @@
 						data.push({
 							x : i,
 							y : Math.round(_.random(0, 10000) / _.random(1, 1000)),
-							r : 1,
-							type : _.random(0,100) < 95 ? 'Success' : (_.random(0,100) < 95 ? 'Failed' : 'Warning')
+							r : 3,
+							type : _.random(0,100) < 80 ? 'Success' : (_.random(0,100) < 80 ? 'Failed' : (_.random(0,100) < 80 ? 'Warning' : 'Others'))
 						});
 					}
 					oScatterChart.addBubbleAndMoveAndDraw(data, date.getTime() + 21600000);
@@ -185,8 +188,8 @@
 						data.push({
 							x : i,
 							y : Math.round(_.random(0, 10000) / _.random(1, 1000)),
-							r : 1,
-							type : _.random(0,100) < 95 ? 'Success' : (_.random(0,100) < 95 ? 'Failed' : 'Warning')
+							r : 3,
+							type : _.random(0,100) < 80 ? 'Success' : (_.random(0,100) < 80 ? 'Failed' : (_.random(0,100) < 80 ? 'Warning' : 'Others'))
 						});
 					}
 					oScatterChart.addBubbleAndMoveAndDraw(data, date.getTime() + 25200000);
@@ -198,8 +201,8 @@
 						data.push({
 							x : i,
 							y : Math.round(_.random(0, 10000) / _.random(1, 1000)),
-							r : 1,
-							type : _.random(0,100) < 95 ? 'Success' : (_.random(0,100) < 95 ? 'Failed' : 'Warning')
+							r : 3,
+							type : _.random(0,100) < 80 ? 'Success' : (_.random(0,100) < 80 ? 'Failed' : (_.random(0,100) < 80 ? 'Warning' : 'Others'))
 						});
 					}
 					oScatterChart.addBubbleAndMoveAndDraw(data, date.getTime() + 28800000);
@@ -211,8 +214,8 @@
 						data.push({
 							x : i,
 							y : Math.round(_.random(0, 10000) / _.random(1, 1000)),
-							r : 1,
-							type : _.random(0,100) < 95 ? 'Success' : (_.random(0,100) < 95 ? 'Failed' : 'Warning')
+							r : 3,
+							type : _.random(0,100) < 80 ? 'Success' : (_.random(0,100) < 80 ? 'Failed' : (_.random(0,100) < 80 ? 'Warning' : 'Others'))
 						});
 					}
 					oScatterChart.addBubbleAndMoveAndDraw(data, date.getTime() + 32400000);
