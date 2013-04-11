@@ -31,6 +31,11 @@ var BigScatterChart = $.Class({
 			},
 			'sXLabel' : '',
 			'sYLabel' : '',
+			'htLabelStyle' : {
+				'font-size': '10px',
+				'line-height': '20px',
+				'height': '20px',
+			},
 			'fXAxisFormat' : function(nXStep, i){
 				var nMilliseconds = (nXStep * i + this._nXMin),
 					sDate = new Date(nMilliseconds).toString("HH:mm");
@@ -157,15 +162,14 @@ var BigScatterChart = $.Class({
 		});
 		this._welOverlay.appendTo(this._welContainer);
 
+		var htLabelStyle = this.option('htLabelStyle');
 		// x axis
 		for(var i=0; i<=this.option('nXSteps'); i++){
 			this._nXNumbers.push($('<div>')
 				.text(' ')
+				.css(htLabelStyle)
 				.css({
 					'position': 'absolute',
-					'font-size': '10px',
-					'line-height': '20px',
-					'height': '20px',
 					'width': nXStep + 'px',
 					'text-align': 'center',
 					'top': (nHeight - nPaddingBottom + 10) + 'px',
@@ -179,11 +183,9 @@ var BigScatterChart = $.Class({
 		for(var i=0; i<=this.option('nYSteps'); i++){
 			this._nYNumbers.push($('<div>')
 				.text(' ')
+				.css(htLabelStyle)
 				.css({
 					'position': 'absolute',
-					'font-size': '10px',
-					'line-height': '20px',
-					'height': '20px',
 					'vertical-align': 'middle',
 					'width': (nPaddingLeft - 15) + 'px',
 					'text-align': 'right',
@@ -201,11 +203,9 @@ var BigScatterChart = $.Class({
 		if(_.isString(sXLabel) && sXLabel.length > 0){
 			this._welOverlay.append($('<div>')
 									.text(sXLabel)
+									.css(htLabelStyle)
 									.css({
 										'position': 'absolute',
-										'font-size': '10px',
-										'line-height': '20px',
-										'height': '20px',
 										'text-align': 'center',
 										'top': (nHeight - nPaddingBottom + 10) + 'px',
 										'right': 0,
@@ -219,10 +219,9 @@ var BigScatterChart = $.Class({
 		if(_.isString(sYLabel) && sYLabel.length > 0){
 			this._welOverlay.append($('<div>')
 									.text(sYLabel)
+									.css(htLabelStyle)
 									.css({
 										'position' : 'absolute',
-										'font-size' : '10px',
-										'line-height' : '20px',
 										'vertical-align' : 'middle',
 										'width': (nPaddingLeft - 15) + 'px',
 										'text-align': 'right',
