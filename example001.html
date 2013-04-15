@@ -35,6 +35,7 @@
 					nYMin: 0, nYMax: 10000,
 					nZMin: 0, nZMax: 5,
 					nBubbleSize: 3,
+					nDefaultRadius : 3,
 					htTypeAndColor : {
 						'Success' : '#b6da54', // type name : color
 						'Warning' : '#fcc666',
@@ -58,7 +59,6 @@
 					data.push({
 						x : i,
 						y : Math.round(_.random(0, 10000) / _.random(1, 1000)),
-						r : 3,
 						type : _.random(0,100) < 80 ? 'Success' : (_.random(0,100) < 80 ? 'Failed' : (_.random(0,100) < 80 ? 'Warning' : 'Others'))
 					});
 				}
@@ -71,7 +71,6 @@
 						data.push({
 							x : i,
 							y : Math.round(_.random(0, 10000) / _.random(1, 1000)),
-							r : 3,
 							type : _.random(0,100) < 80 ? 'Success' : (_.random(0,100) < 80 ? 'Failed' : (_.random(0,100) < 80 ? 'Warning' : 'Others'))
 						});
 					}
@@ -84,7 +83,6 @@
 						data.push({
 							x : i,
 							y : Math.round(_.random(0, 10000) / _.random(1, 1000)),
-							r : 3,
 							type : _.random(0,100) < 80 ? 'Success' : (_.random(0,100) < 80 ? 'Failed' : (_.random(0,100) < 80 ? 'Warning' : 'Others'))
 						});
 					}
@@ -97,7 +95,6 @@
 						data.push({
 							x : i,
 							y : Math.round(_.random(0, 10000) / _.random(1, 1000)),
-							r : 3,
 							type : _.random(0,100) < 80 ? 'Success' : (_.random(0,100) < 80 ? 'Failed' : (_.random(0,100) < 80 ? 'Warning' : 'Others'))
 						});
 					}
@@ -110,7 +107,7 @@
 						data.push({
 							x : i,
 							y : Math.round(_.random(0, 10000) / _.random(1, 1000)),
-							r : 3,
+							r : _.random(3,5),
 							type : _.random(0,100) < 80 ? 'Success' : (_.random(0,100) < 80 ? 'Failed' : (_.random(0,100) < 80 ? 'Warning' : 'Others'))
 						});
 					}
@@ -123,7 +120,6 @@
 						data.push({
 							x : i,
 							y : Math.round(_.random(0, 10000) / _.random(1, 1000)),
-							r : 3,
 							type : _.random(0,100) < 80 ? 'Success' : (_.random(0,100) < 80 ? 'Failed' : (_.random(0,100) < 80 ? 'Warning' : 'Others'))
 						});
 					}
@@ -136,7 +132,6 @@
 						data.push({
 							x : i,
 							y : Math.round(_.random(0, 10000) / _.random(1, 1000)),
-							r : 3,
 							type : _.random(0,100) < 80 ? 'Success' : (_.random(0,100) < 80 ? 'Failed' : (_.random(0,100) < 80 ? 'Warning' : 'Others'))
 						});
 					}
@@ -149,7 +144,6 @@
 						data.push({
 							x : i,
 							y : Math.round(_.random(0, 10000) / _.random(1, 1000)),
-							r : 3,
 							type : _.random(0,100) < 80 ? 'Success' : (_.random(0,100) < 80 ? 'Failed' : (_.random(0,100) < 80 ? 'Warning' : 'Others'))
 						});
 					}
@@ -162,7 +156,6 @@
 						data.push({
 							x : i,
 							y : Math.round(_.random(0, 10000) / _.random(1, 1000)),
-							r : 3,
 							type : _.random(0,100) < 80 ? 'Success' : (_.random(0,100) < 80 ? 'Failed' : (_.random(0,100) < 80 ? 'Warning' : 'Others'))
 						});
 					}
@@ -175,7 +168,7 @@
 						data.push({
 							x : i,
 							y : Math.round(_.random(0, 10000) / _.random(1, 1000)),
-							r : 3,
+							r : _.random(4,5),
 							type : _.random(0,100) < 80 ? 'Success' : (_.random(0,100) < 80 ? 'Failed' : (_.random(0,100) < 80 ? 'Warning' : 'Others'))
 						});
 					}
@@ -188,7 +181,6 @@
 						data.push({
 							x : i,
 							y : Math.round(_.random(0, 10000) / _.random(1, 1000)),
-							r : 3,
 							type : _.random(0,100) < 80 ? 'Success' : (_.random(0,100) < 80 ? 'Failed' : (_.random(0,100) < 80 ? 'Warning' : 'Others'))
 						});
 					}
@@ -201,7 +193,7 @@
 						data.push({
 							x : i,
 							y : Math.round(_.random(0, 10000) / _.random(1, 1000)),
-							r : 3,
+							r : _.random(3,5),
 							type : _.random(0,100) < 80 ? 'Success' : (_.random(0,100) < 80 ? 'Failed' : (_.random(0,100) < 80 ? 'Warning' : 'Others'))
 						});
 					}
@@ -214,7 +206,6 @@
 						data.push({
 							x : i,
 							y : Math.round(_.random(0, 10000) / _.random(1, 1000)),
-							r : 3,
 							type : _.random(0,100) < 80 ? 'Success' : (_.random(0,100) < 80 ? 'Failed' : (_.random(0,100) < 80 ? 'Warning' : 'Others'))
 						});
 					}
