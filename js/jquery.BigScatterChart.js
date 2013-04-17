@@ -479,7 +479,8 @@ var BigScatterChart = $.Class({
 			sLineColor = this.option('sLineColor'),
 			htGuideLine = this.option('htGuideLine');
 
-		this._oAxisCtx.lineWidth = 2;
+		this._oAxisCtx.lineWidth = htGuideLine.nLineWidth;
+		this._oAxisCtx.globalAlpha = 1;
 		this._oAxisCtx.lineCap = 'round';
 	  	this._oAxisCtx.strokeStyle = sLineColor;
 	  	this._oAxisCtx.beginPath();
@@ -488,23 +489,24 @@ var BigScatterChart = $.Class({
 		this._oAxisCtx.lineTo(nWidth - nPaddingRight, nHeight - nPaddingBottom);
 	  	this._oAxisCtx.stroke();
 
+	  	this._oGuideCtx.lineWidth = htGuideLine.nLineWidth;
+		this._oGuideCtx.globalAlpha = htGuideLine.nGlobalAlpha;	
+		if ( this._oGuideCtx.setLineDash !== undefined )   this._oGuideCtx.setLineDash(htGuideLine.aLineDash);
+		if ( this._oGuideCtx.mozDash !== undefined )       this._oGuideCtx.mozDash = htGuideLine.aLineDash;		  	
+
 		var nXStep = this._nXWork / this.option('nXSteps');
 		var nYStep = this._nYWork / this.option('nYSteps');
 
 		for(var i=0; i<=this.option('nXSteps'); i++){
 			var mov = nPaddingLeft + nBubbleSize + nXStep * i;
-			this._oAxisCtx.lineWidth = htGuideLine.nLineWidth;
-			this._oAxisCtx.setLineDash([0]);
-			this._oAxisCtx.globalAlpha = 1;
 	  		this._oAxisCtx.beginPath();
 			this._oAxisCtx.moveTo(mov, nHeight - nPaddingBottom);
 			this._oAxisCtx.lineTo(mov, nHeight - nPaddingBottom + 10);
 			this._oAxisCtx.stroke();
 
 			// x 축 가이드라인
-			this._oGuideCtx.lineWidth = htGuideLine.nLineWidth;
-			this._oGuideCtx.setLineDash(htGuideLine.aLineDash);
-			this._oGuideCtx.globalAlpha = htGuideLine.nGlobalAlpha;
+			
+			// this._oGuideCtx.setLineDash(htGuideLine.aLineDash);
 			this._oGuideCtx.beginPath();
 			this._oGuideCtx.moveTo(mov, nPaddingTop);
 			this._oGuideCtx.lineTo(mov, nHeight - nPaddingBottom);
@@ -513,18 +515,12 @@ var BigScatterChart = $.Class({
 
 		for(var i=0; i<=this.option('nYSteps'); i++){
 			var mov = nHeight - (nPaddingBottom + nBubbleSize + nYStep * i);
-			this._oAxisCtx.lineWidth = htGuideLine.nLineWidth;
-			this._oAxisCtx.setLineDash([0]);
-			this._oAxisCtx.globalAlpha = 1;			
 			this._oAxisCtx.beginPath();
 		  	this._oAxisCtx.moveTo(nPaddingLeft, mov);
 			this._oAxisCtx.lineTo(nPaddingLeft - 10, mov);
 			this._oAxisCtx.stroke();
 
 			// y 축 가이드라인
-			this._oGuideCtx.lineWidth = htGuideLine.nLineWidth;
-			this._oGuideCtx.setLineDash(htGuideLine.aLineDash);
-			this._oGuideCtx.globalAlpha = htGuideLine.nGlobalAlpha;
 			this._oGuideCtx.beginPath();
 			this._oGuideCtx.moveTo(nPaddingLeft, mov);
 			this._oGuideCtx.lineTo(nWidth - nPaddingRight, mov);			
