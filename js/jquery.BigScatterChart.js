@@ -31,6 +31,11 @@ var BigScatterChart = $.Class({
 				'aLineDash' : [2, 5],
 				'nGlobalAlpha' : 0.2
 			},
+			'sTitle' : 'Big Scatter Chart by Denny',
+			'htTitleStyle' : {
+				'font-size' : '12px',
+				'font-weight' : 'bold'
+			},
 			'sXLabel' : '',
 			'sYLabel' : '',
 			'htLabelStyle' : {
@@ -199,7 +204,6 @@ var BigScatterChart = $.Class({
 		for(var i=0; i<=this.option('nXSteps'); i++){
 			this._nXNumbers.push($('<div>')
 				.text(' ')
-				.css(htLabelStyle)
 				.css({
 					'position': 'absolute',
 					'width': nXStep + 'px',
@@ -208,6 +212,7 @@ var BigScatterChart = $.Class({
 					'left': (nPaddingLeft + nBubbleSize) - (nXStep / 2) + i * nXStep + 'px',
 					'color': sLineColor
 				})
+				.css(htLabelStyle)
 			);
 		}
 
@@ -215,7 +220,6 @@ var BigScatterChart = $.Class({
 		for(var i=0; i<=this.option('nYSteps'); i++){
 			this._nYNumbers.push($('<div>')
 				.text(' ')
-				.css(htLabelStyle)
 				.css({
 					'position': 'absolute',
 					'vertical-align': 'middle',
@@ -225,6 +229,7 @@ var BigScatterChart = $.Class({
 					'left': '0px',
 					'color': sLineColor
 				})
+				.css(htLabelStyle)
 			);
 		}
 		this._welOverlay.append(this._nXNumbers);
@@ -307,10 +312,10 @@ var BigScatterChart = $.Class({
 		}, this);
 		this._welTypeUl.appendTo(this._welOverlay);
 
-		var aChartCanvas = [];
+		this._awelChartCanvasInOrder = [];
 		_.each(this._htwelChartCanvas, function(welChartCanvas, sKey){
-			aChartCanvas.push(welChartCanvas);
-		});
+			this._awelChartCanvasInOrder.push(welChartCanvas);
+		}, this);
 		this._welTypeUl.mousedown(function(event){
 			event.stopPropagation();
 		});
@@ -327,17 +332,33 @@ var BigScatterChart = $.Class({
         		var nStart = ui.item.startIndex,
         			nStop = ui.item.index();
 
-        		var welStart = aChartCanvas[nStart];
-        		aChartCanvas.splice(nStart, 1); 
-        		aChartCanvas.splice(nStop, 0, welStart);
+        		var welStart = self._awelChartCanvasInOrder[nStart];
+        		self._awelChartCanvasInOrder.splice(nStart, 1); 
+        		self._awelChartCanvasInOrder.splice(nStop, 0, welStart);
         		
-        		for(var i=0, nLen=aChartCanvas.length; i<nLen; i++){
-        			aChartCanvas[i].css('z-index', nZIndexForCanvas+i);
+        		for(var i=0, nLen=self._awelChartCanvasInOrder.length; i<nLen; i++){
+        			self._awelChartCanvasInOrder[i].css('z-index', nZIndexForCanvas+i);
         		}
 			}
 		});
 
 		this._resetTypeCount();
+
+		// title
+		var sTitle = this.option('sTitle'),
+			htTitleStyle = this.option('htTitleStyle');
+		if(_.isString(sTitle) && sTitle.length > 0){
+			this._welOverlay.append($('<div>')
+									.text(sTitle)
+									.css({
+										'position' : 'absolute',
+										'vertical-align' : 'middle',
+										'top': '12px',
+										'left': nPaddingLeft + 'px'
+									})
+									.css(htTitleStyle)
+			);
+		}		
 	},
 
 	_initEvents : function(){
@@ -505,8 +526,6 @@ var BigScatterChart = $.Class({
 			this._oAxisCtx.stroke();
 
 			// x 축 가이드라인
-			
-			// this._oGuideCtx.setLineDash(htGuideLine.aLineDash);
 			this._oGuideCtx.beginPath();
 			this._oGuideCtx.moveTo(mov, nPaddingTop);
 			this._oGuideCtx.lineTo(mov, nHeight - nPaddingBottom);
@@ -935,31 +954,47 @@ var BigScatterChart = $.Class({
 
 	destroy : function(){
 		this._welContainer.empty();
-		delete this._welTypeUl;
-		delete this._aBubbles;
-		delete this._aBubbleStep;
-		delete this._htBubbleCtx;
-		delete this._htTypeCount;
-		delete this._htwelChartCanvas;
-		delete this._htwelTypeLi;
-		delete this._htwelTypeSpan;
-		delete this._nXMax;
-		delete this._nXMin;
-		delete this._nXNumbers;
-		delete this._nXWork;
-		delete this._nYMax;
-		delete this._nYMin;
-		delete this._nYNumbers;
-		delete this._nYWork;
-		delete this._nZMax;
-		delete this._nZMin;
-		delete this._oGuideCtx;
-		delete this._welContainer;
-		delete this._welGuideCanvas;
-		delete this._welOverlay;
-		delete this._welTypeUlv
-		// delete this.htOption;
-		// delete this.__proto__;
-		// delete this;
+		_.each(this, function(content, property){
+			delete this[property];
+		}, this);
+	},
+
+	_mergeAllDisplay : function(){
+		var nWidth = this.option('nWidth'),
+			nHeight = this.option('nHeight');
+		var welCanvas = $('<canvas>').attr({
+										'width' : nWidth,
+										'height' : nHeight
+									});
+		var oCtx = welCanvas.get(0).getContext('2d');
+		oCtx.fillStyle="#FFFFFF";
+		oCtx.fillRect(0, 0, nWidth, nHeight);
+		// soCtx.globalCompositeOperation = 'destination-out';
+
+		oCtx.drawImage(this._welGuideCanvas.get(0), 0, 0);
+		_.each(this._awelChartCanvasInOrder, function(welChartCanvas, sKey){
+			if(welChartCanvas.css('display') === 'block'){
+				oCtx.drawImage(welChartCanvas.get(0), 0, 0);
+			}
+		}, this);
+
+		oCtx.drawImage(this._welAxisCanvas.get(0), 0, 0);
+
+		return welCanvas;
+	},
+
+	saveAsPNG : function(){
+		var welCanvas = this._mergeAllDisplay();
+		Canvas2Image.saveAsPNG(welCanvas.get(0));
+	},
+
+	saveAsJPEG : function(){
+		var welCanvas = this._mergeAllDisplay();
+		Canvas2Image.saveAsJPEG(welCanvas.get(0));
+	},
+
+	saveAsBMP : function(){
+		var welCanvas = this._mergeAllDisplay();
+		Canvas2Image.saveAsBMP(welCanvas.get(0));
 	}
 });
