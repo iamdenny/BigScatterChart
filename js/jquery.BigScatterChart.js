@@ -1050,7 +1050,6 @@ var BigScatterChart = $.Class({
 				nY = parseInt(this._welXLabel.css('top'), 10);
 			oCtx.fillStyle = this._welXLabel.css('color');
 			oCtx.font = this._welXLabel.css('font');
-			console.log(nX, nY);
 			oCtx.fillText(this._welXLabel.text(), nX, nY);
 		}
 
