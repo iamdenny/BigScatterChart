@@ -42,16 +42,14 @@
 		<script type="text/javascript" src="https://raw.github.com/iamdenny/BigScatterChart/master/js/date.js"></script>
 		<script type="text/javascript" src="https://raw.github.com/iamdenny/BigScatterChart/master/js/jquery.Class.js"></script>
 		<script type="text/javascript" src="https://raw.github.com/iamdenny/BigScatterChart/master/js/jquery.dragToSelect.js"></script>
-		<script type="text/javascript" src="https://raw.github.com/iamdenny/BigScatterChart/master/js/canvas2image.js"></script>
 		<script type="text/javascript" src="https://raw.github.com/iamdenny/BigScatterChart/master/js/jquery.BigScatterChart.js"></script>
 	</head>
 	<body>
 		<div style="padding-left:100px">
 			<div id="chart1"></div>
 			<button onclick="oScatterChart.destroy()">Destroy</button>
-			<button onclick="oScatterChart.saveAsPNG()">Save as PNG</button>
-			<button onclick="oScatterChart.saveAsJPEG()">Save as JPEG</button>
-			<button onclick="oScatterChart.saveAsBMP()">Save as BMP</button>
+			<a href="" download="BigScatterChart.png" onclick="oScatterChart.saveAsPNG(this)">Save as PNG</a>
+			<a href="" download="BigScatterChart.jpg" onclick="oScatterChart.saveAsJPEG(this)">Save as JPEG</a>
 		</div>
 
 		<script type="text/javascript">
