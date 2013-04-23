@@ -98,8 +98,8 @@ var BigScatterChart = $.Class({
 		this._nZMax = this.option('nZMax');
 		this._nZMin = this.option('nZMin');
 		
-		this._nXNumbers = [];
-		this._nYNumbers = [];		
+		this._awelXNumber = [];
+		this._awelYNumber = [];		
 
 		this._htTypeCount = {};
 	},
@@ -202,7 +202,7 @@ var BigScatterChart = $.Class({
 		var htLabelStyle = this.option('htLabelStyle');
 		// x axis
 		for(var i=0; i<=this.option('nXSteps'); i++){
-			this._nXNumbers.push($('<div>')
+			this._awelXNumber.push($('<div>')
 				.text(' ')
 				.css({
 					'position': 'absolute',
@@ -218,7 +218,7 @@ var BigScatterChart = $.Class({
 
 		// y axis
 		for(var i=0; i<=this.option('nYSteps'); i++){
-			this._nYNumbers.push($('<div>')
+			this._awelYNumber.push($('<div>')
 				.text(' ')
 				.css({
 					'position': 'absolute',
@@ -232,13 +232,13 @@ var BigScatterChart = $.Class({
 				.css(htLabelStyle)
 			);
 		}
-		this._welOverlay.append(this._nXNumbers);
-		this._welOverlay.append(this._nYNumbers);	
+		this._welOverlay.append(this._awelXNumber);
+		this._welOverlay.append(this._awelYNumber);	
 
 		// sXLabel
 		var sXLabel = this.option('sXLabel');
 		if(_.isString(sXLabel) && sXLabel.length > 0){
-			this._welOverlay.append($('<div>')
+			this._welOverlay.append(this._welXLabel = $('<div>')
 									.text(sXLabel)
 									.css(htLabelStyle)
 									.css({
@@ -254,7 +254,7 @@ var BigScatterChart = $.Class({
 		// sYLabel
 		var sYLabel = this.option('sYLabel');
 		if(_.isString(sYLabel) && sYLabel.length > 0){
-			this._welOverlay.append($('<div>')
+			this._welOverlay.append(this._welYLabel = $('<div>')
 									.text(sYLabel)
 									.css(htLabelStyle)
 									.css({
@@ -288,7 +288,7 @@ var BigScatterChart = $.Class({
 			.css({
 				'float' : 'right',
 				'top' : '5px',
-				'right' : nPaddingRight,
+				'right' : nPaddingRight + 'px',
 				'list-style' : 'none',
 				'font-size' : '12px'
 			});
@@ -348,7 +348,7 @@ var BigScatterChart = $.Class({
 		var sTitle = this.option('sTitle'),
 			htTitleStyle = this.option('htTitleStyle');
 		if(_.isString(sTitle) && sTitle.length > 0){
-			this._welOverlay.append($('<div>')
+			this._welOverlay.append(this._welTitle = $('<div>')
 									.text(sTitle)
 									.css({
 										'position' : 'absolute',
@@ -555,7 +555,7 @@ var BigScatterChart = $.Class({
 		
 		var fXAxisFormat = this.option('fXAxisFormat'),
 			nXStep = (this._nXMax - this._nXMin) / this.option('nXSteps');
-		_.each(this._nXNumbers, function(el, i){
+		_.each(this._awelXNumber, function(el, i){
 			if(_.isFunction(fXAxisFormat)){
 				el.text(fXAxisFormat.call(this, nXStep, i));
 			}else{
@@ -565,7 +565,7 @@ var BigScatterChart = $.Class({
 		
 		var fYAxisFormat = this.option('fYAxisFormat'),
 			nYStep = (this._nYMax - this._nYMin) / this.option('nYSteps');
-		_.each(this._nYNumbers, function(el, i){
+		_.each(this._awelYNumber, function(el, i){
 			if(_.isFunction(fXAxisFormat)){
 				el.text(fYAxisFormat.call(this, nYStep, i));
 			}else{
@@ -971,14 +971,104 @@ var BigScatterChart = $.Class({
 		oCtx.fillRect(0, 0, nWidth, nHeight);
 		// soCtx.globalCompositeOperation = 'destination-out';
 
+		// guide line
 		oCtx.drawImage(this._welGuideCanvas.get(0), 0, 0);
+
+		// scatter
 		_.each(this._awelChartCanvasInOrder, function(welChartCanvas, sKey){
 			if(welChartCanvas.css('display') === 'block'){
 				oCtx.drawImage(welChartCanvas.get(0), 0, 0);
 			}
 		}, this);
 
+		// xy axis
 		oCtx.drawImage(this._welAxisCanvas.get(0), 0, 0);
+
+		// common setting
+		oCtx.textBaseline = "top";
+
+		// title
+		var nTitleX = parseInt(this._welTitle.css('left'), 10),
+			nTitleY = parseInt(this._welTitle.css('top'), 10);
+		oCtx.textAlign = "left"; 
+		oCtx.fillStyle = this._welTitle.css('color');		
+		oCtx.font = this._welTitle.css('font');
+		oCtx.fillText(this._welTitle.text(), nTitleX, nTitleY);
+
+		// count
+		var htContainerOffset = this._welContainer.offset();
+		oCtx.textAlign = "left";
+		_.each(this._htwelTypeLi, function(welTypeLi){
+			var htOffset = welTypeLi.offset();
+			var nX = htOffset.left - htContainerOffset.left,
+				nY = htOffset.top - htContainerOffset.top;
+			console.log(nX, nY, welTypeLi.css('color'), welTypeLi.css('font'));
+			oCtx.fillStyle = welTypeLi.css('color');
+			oCtx.font = welTypeLi.css('font');
+			oCtx.fillText(welTypeLi.text(), nX, nY);		
+			if(welTypeLi.hasClass('strike')){
+				oCtx.moveTo(nX, nY + welTypeLi.height()/2);
+				oCtx.lineTo(nX + welTypeLi.width(), nY + welTypeLi.height()/2);
+				oCtx.strokeStyle = welTypeLi.css('color');
+				oCtx.lineWidth = 0.7;
+				oCtx.stroke();
+			}	
+		});
+
+		// x axis
+		oCtx.textAlign = "center"; 
+		_.each(this._awelXNumber, function(welXNumber){
+			var nX = parseInt(welXNumber.css('left'), 10) + welXNumber.width() / 2,
+				nY = parseInt(welXNumber.css('top'), 10);
+			oCtx.fillStyle = welXNumber.css('color');
+			oCtx.font = welXNumber.css('font');
+			oCtx.fillText(welXNumber.text(), nX, nY);
+		});
+
+		// y axis
+		oCtx.textAlign = "right"; 
+		_.each(this._awelYNumber, function(welYNumber){
+			var nX = parseInt(welYNumber.css('left'), 10) + welYNumber.width(),
+				nY = parseInt(welYNumber.css('top'), 10);
+			oCtx.fillStyle = welYNumber.css('color');
+			oCtx.font = welYNumber.css('font');
+			oCtx.fillText(welYNumber.text(), nX, nY);
+		});
+
+		// x label
+		oCtx.textAlign = "right"; 
+		var nX = nWidth,
+			nY = parseInt(this._welXLabel.css('top'), 10);
+		oCtx.fillStyle = this._welXLabel.css('color');
+		oCtx.font = this._welXLabel.css('font');
+		console.log(nX, nY);
+		oCtx.fillText(this._welXLabel.text(), nX, nY);
+
+		// y label
+		oCtx.textAlign = "right"; 
+		nX = parseInt(this._welYLabel.css('left'), 10) + this._welYLabel.width();
+		nY = parseInt(this._welYLabel.css('top'), 10);
+		oCtx.fillStyle = this._welYLabel.css('color');
+		oCtx.font = this._welYLabel.css('font');
+		oCtx.fillText(this._welYLabel.text(), nX, nY);
+
+		// nodata
+		if(this._welShowNoData.css('display') === 'block'){
+			oCtx.textAlign = "center";
+			oCtx.fillStyle = this._welShowNoData.css('color');
+			oCtx.font = this._welShowNoData.css('font');
+			oCtx.fillText(this._welShowNoData.text(), parseInt(this._welShowNoData.css('top')), nWidth/2);
+		}
+
+		// drag-selecting
+		var sDragToSelectClassName = this.option('sDragToSelectClassName'),
+			welDragToSelect = $('.' + sDragToSelectClassName);
+		oCtx.rect(parseInt(welDragToSelect.css('left')), parseInt(welDragToSelect.css('top')), welDragToSelect.width(), welDragToSelect.height());
+		oCtx.globalAlpha = welDragToSelect.css('opacity');
+		oCtx.fillStyle = welDragToSelect.css('background-color');
+		oCtx.fill();
+		oCtx.strokeStyle = welDragToSelect.css('border-color');
+		oCtx.stroke();
 
 		return welCanvas;
 	},
