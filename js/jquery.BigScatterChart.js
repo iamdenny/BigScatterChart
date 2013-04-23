@@ -66,6 +66,13 @@ var BigScatterChart = $.Class({
 		this._initEvents();
 		this._drawXYAxis();
 		this.updateXYAxis();
+
+		// var self = this;
+		// $('#saveAsPNG').click(function(e){
+		// 	var welCanvas = self._mergeAllDisplay();
+		// 	$(this).attr('href', welCanvas.get(0).toDataURL());
+			
+		// });
 	},
 
 	_initVariables : function(){		
@@ -1073,18 +1080,13 @@ var BigScatterChart = $.Class({
 		return welCanvas;
 	},
 
-	saveAsPNG : function(){
+	saveAsPNG : function(elA){
 		var welCanvas = this._mergeAllDisplay();
-		Canvas2Image.saveAsPNG(welCanvas.get(0));
+		$(elA).attr('href', welCanvas.get(0).toDataURL('image/png'));
 	},
 
-	saveAsJPEG : function(){
+	saveAsJPEG : function(elA){
 		var welCanvas = this._mergeAllDisplay();
-		Canvas2Image.saveAsJPEG(welCanvas.get(0));
-	},
-
-	saveAsBMP : function(){
-		var welCanvas = this._mergeAllDisplay();
-		Canvas2Image.saveAsBMP(welCanvas.get(0));
+		$(elA).attr('href', welCanvas.get(0).toDataURL('image/jpeg'));
 	}
 });
