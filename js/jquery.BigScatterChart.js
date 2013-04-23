@@ -995,12 +995,14 @@ var BigScatterChart = $.Class({
 		oCtx.textBaseline = "top";
 
 		// title
-		var nTitleX = parseInt(this._welTitle.css('left'), 10),
-			nTitleY = parseInt(this._welTitle.css('top'), 10);
-		oCtx.textAlign = "left"; 
-		oCtx.fillStyle = this._welTitle.css('color');		
-		oCtx.font = this._welTitle.css('font');
-		oCtx.fillText(this._welTitle.text(), nTitleX, nTitleY);
+		if(this._welTitle){
+			var nTitleX = parseInt(this._welTitle.css('left'), 10),
+				nTitleY = parseInt(this._welTitle.css('top'), 10);
+			oCtx.textAlign = "left"; 
+			oCtx.fillStyle = this._welTitle.css('color');		
+			oCtx.font = this._welTitle.css('font');
+			oCtx.fillText(this._welTitle.text(), nTitleX, nTitleY);
+		}
 
 		// count
 		var htContainerOffset = this._welContainer.offset();
@@ -1009,7 +1011,6 @@ var BigScatterChart = $.Class({
 			var htOffset = welTypeLi.offset();
 			var nX = htOffset.left - htContainerOffset.left,
 				nY = htOffset.top - htContainerOffset.top;
-			console.log(nX, nY, welTypeLi.css('color'), welTypeLi.css('font'));
 			oCtx.fillStyle = welTypeLi.css('color');
 			oCtx.font = welTypeLi.css('font');
 			oCtx.fillText(welTypeLi.text(), nX, nY);		
@@ -1043,21 +1044,25 @@ var BigScatterChart = $.Class({
 		});
 
 		// x label
-		oCtx.textAlign = "right"; 
-		var nX = nWidth,
-			nY = parseInt(this._welXLabel.css('top'), 10);
-		oCtx.fillStyle = this._welXLabel.css('color');
-		oCtx.font = this._welXLabel.css('font');
-		console.log(nX, nY);
-		oCtx.fillText(this._welXLabel.text(), nX, nY);
+		if(this._welXLabel){
+			oCtx.textAlign = "right"; 
+			var nX = nWidth,
+				nY = parseInt(this._welXLabel.css('top'), 10);
+			oCtx.fillStyle = this._welXLabel.css('color');
+			oCtx.font = this._welXLabel.css('font');
+			console.log(nX, nY);
+			oCtx.fillText(this._welXLabel.text(), nX, nY);
+		}
 
 		// y label
-		oCtx.textAlign = "right"; 
-		nX = parseInt(this._welYLabel.css('left'), 10) + this._welYLabel.width();
-		nY = parseInt(this._welYLabel.css('top'), 10);
-		oCtx.fillStyle = this._welYLabel.css('color');
-		oCtx.font = this._welYLabel.css('font');
-		oCtx.fillText(this._welYLabel.text(), nX, nY);
+		if(this._welYLabel){
+			oCtx.textAlign = "right"; 
+			var nX = parseInt(this._welYLabel.css('left'), 10) + this._welYLabel.width(),
+				nY = parseInt(this._welYLabel.css('top'), 10);
+			oCtx.fillStyle = this._welYLabel.css('color');
+			oCtx.font = this._welYLabel.css('font');
+			oCtx.fillText(this._welYLabel.text(), nX, nY);
+		}
 
 		// nodata
 		if(this._welShowNoData.css('display') === 'block'){
