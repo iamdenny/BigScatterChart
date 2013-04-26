@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ko" xml:lang="ko">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta http-equiv="Content-Script-Type" content="text/javascript" />
+		<meta http-equiv="Content-Style-Type" content="text/css" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=800" />
+
+		<link type="text/css" rel="stylesheet" href="./css/jquery-ui.css" />
+		<link type="text/css" rel="stylesheet" href="./css/jquery.dragToSelect.css">
+		<link type="text/css" rel="stylesheet" href="./css/bigscatterchart.css" />
+		
+		<script type="text/javascript" src="./js/jquery-1.9.1.min.js"></script>
+		<script type="text/javascript" src="./js/jquery-ui.js"></script>
+		<script type="text/javascript" src="./js/modernizr.js"></script>
+		<script type="text/javascript" src="./js/underscore-min.js"></script>
+		<script type="text/javascript" src="./js/date.js"></script>
+		<script type="text/javascript" src="./js/jquery.Class.js"></script>
+		<script type="text/javascript" src="./js/jquery.dragToSelect.js"></script>
+		<script type="text/javascript" src="./js/jquery.BigScatterChart.js"></script>
+	</head>
+	<body>
+		<div style="padding-left:100px">
+			<div id="chart1"></div>
+			<button onclick="oScatterChart.destroy()">Destory</button>
+			<a href="" download="BigScatterChart.png" onclick="oScatterChart.saveAsPNG(this)">Save as PNG</a>
+			<a href="" download="BigScatterChart.jpg" onclick="oScatterChart.saveAsJPEG(this)">Save as JPEG</a>
+		</div>
+
+		<script type="text/javascript">
+			var date = new Date();
+			if(Modernizr.canvas){
+				doBigScatterChart();
+			}
+			var oScatterChart;
+			function doBigScatterChart(){
+				oScatterChart = new BigScatterChart({
+					sContainerId : 'chart1',
+					nWidth : 800,
+					nHeight : 600,
+					nXMin: date.getTime() - (2880 * 60 * 1000), nXMax: date.getTime(), // 5m : 5, 20m : 20, 1h : 60, 6h : 360, 1d : 1440, 2d : 2880
+					nYMin: 0, nYMax: 10000,
+					nZMin: 0, nZMax: 5,
+					nBubbleSize: 3,
+					nDefaultRadius : 3,
+					htTypeAndColor : {
+						'Success' : '#b6da54', // type name : color
+						'Warning' : '#fcc666',
+						'Failed' : '#fd7865',
+						'Others' : '#55c7c7'
+					},
+					sXLabel : '(time)',
+					sYLabel : '(ms)',
+					fOnSelect : function(htPosition, htXY){
+						console.log('fOnSelect', htPosition, htXY);
+						console.time('fOnSelect');
+						var aData = this.getDataByXY(htXY.nXFrom, htXY.nXTo, htXY.nYFrom, htXY.nYTo);
+						console.timeEnd('fOnSelect');
+						console.log('adata length', aData.length);
+						//alert('Selected data count : ' + aData.length);
+					}
+				});
+				
+				var htDataSource = {
+						fUrl : function(nCallCount) {
+							if(nCallCount === 0) {
+								return "http://114.111.41.36:8080/getLastScatterData.hippo";	
+							} else {
+								return "http://114.111.41.36:8080/getScatterData.hippo";
+							}							
+						},
+						fData : function(nCallCount, htFetchedData) {
+							// calculate parameter
+							var htData;
+							if(nCallCount === 0 || typeof(htFetchedData) === 'undefined'){
+								htData = {
+									'application' : 'apigw-c',
+									'period' : 172800000,
+									'limit' : 5000
+								};
+							}else{
+								htData = {
+									'application' : 'apigw-c',
+									'from' : htFetchedData.scatter[htFetchedData.scatter.length - 1].x + 1,
+									'to' : date.getTime(),
+									'limit' : 5000
+								};
+								console.log(htData);
+							}
+							return htData;
+						},
+						fFetch : function(htFetchedData) {
+							if (htFetchedData.scatter.length != 0) {
+								return true;
+							} else {
+								return false;
+							}
+
+							if (htFetchedData.scatter[htFetchedData.scatter.length - 1].x < date.getTime()) {
+								return true;
+							}					
+							return false;
+						},
+						htOption : {
+							dataType : 'jsonp',
+							jsonp : '_callback'
+						}
+					};
+
+				oScatterChart.loadFromDataSource(htDataSource);
+				// oScatterChart.loadFromDataSourceInRealtime({
+
+				// }, 10000);
+				// oScatterChart.stopRealtime();
+
+			}
+		</script>
+	</body>
+</html>

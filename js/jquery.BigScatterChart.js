@@ -57,6 +57,15 @@ var BigScatterChart = $.Class({
 			},
 			'fYAxisFormat' : function(nYStep, i){
 				return this._addComma((this._nYMax + this._nYMin) - ((nYStep*i) + this._nYMin));
+			},
+			htDataSource : {
+				fUrl : function(){},
+				fData : function(htFetchedData){},
+				fFetch : function(htFetchedData){},
+				htOption : {
+					dataType : 'jsonp',
+					jsonp : 'callback'
+				}
 			}
 		});
 		this.option(htOption);
@@ -66,13 +75,6 @@ var BigScatterChart = $.Class({
 		this._initEvents();
 		this._drawXYAxis();
 		this.updateXYAxis();
-
-		// var self = this;
-		// $('#saveAsPNG').click(function(e){
-		// 	var welCanvas = self._mergeAllDisplay();
-		// 	$(this).attr('href', welCanvas.get(0).toDataURL());
-			
-		// });
 	},
 
 	_initVariables : function(){		
@@ -109,6 +111,8 @@ var BigScatterChart = $.Class({
 		this._awelYNumber = [];		
 
 		this._htTypeCount = {};
+
+		this._bDestroied = false;
 	},
 
 	_initElements : function(){
@@ -723,7 +727,7 @@ var BigScatterChart = $.Class({
 			nDefaultRadius = this.option('nDefaultRadius');
 
 		//this._oChartCtx.lineWidth = 1;
-		for(var i = 0, nLen = aBubbles.length; i < nLen; i++) {
+		for(var i = 0, nLen = aBubbles.length; i < nLen && !this._bDestroied; i++) {
 			var x = this._parseXDataToXChart(aBubbles[i].x),
 				y = this._parseYDataToYChart(aBubbles[i].y),
 				r = this._parseZDataToZChart(aBubbles[i].r || nDefaultRadius),
@@ -964,6 +968,7 @@ var BigScatterChart = $.Class({
 		_.each(this, function(content, property){
 			delete this[property];
 		}, this);
+		this._bDestroied = true;
 	},
 
 	_mergeAllDisplay : function(){
@@ -1092,5 +1097,42 @@ var BigScatterChart = $.Class({
 	saveAsJPEG : function(elA){
 		var welCanvas = this._mergeAllDisplay();
 		$(elA).attr('href', welCanvas.get(0).toDataURL('image/jpeg'));
+	},
+
+	loadFromDataSource : function(htDataSource){
+		if(_.isObject(htDataSource)){
+			this.option('htDataSource', htDataSource);
+		}
+		this.clear();
+		this._abortAjax();
+		this._nCallCount = 0;
+		this._loadFromDataSource();
+	},
+
+	_loadFromDataSource : function(){
+		var self = this;
+		var htDataSource = this.option('htDataSource');
+
+		var htOption = htDataSource.htOption;
+		htOption.url = htDataSource.fUrl.call(this, this._nCallCount);
+		htOption.data = htDataSource.fData.call(this, this._nCallCount, this._htLastFetchedData);
+		htOption.success = function(htData){
+			self._htLastFetchedData = htData;
+
+			htDataSource = self.option('htDataSource'); // refresh
+			var bFetch = htDataSource.fFetch.call(this, htData);
+			if(bFetch === true){
+				self._loadFromDataSource();
+			}
+			self.addBubbleAndDraw(htData.scatter);
+		}
+		this._oAjax = $.ajax(htOption);	
+		this._nCallCount += 1;
+	},
+
+	_abortAjax : function(){
+		if(this._oAjax){
+			this._oAjax.abort();
+		}
 	}
 });
