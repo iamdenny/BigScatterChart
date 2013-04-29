@@ -39,7 +39,7 @@
 					sContainerId : 'chart1',
 					nWidth : 800,
 					nHeight : 600,
-					nXMin: date.getTime() - (2880 * 60 * 1000), nXMax: date.getTime(), // 5m : 5, 20m : 20, 1h : 60, 6h : 360, 1d : 1440, 2d : 2880
+					nXMin: date.getTime() - (5 * 60 * 1000), nXMax: date.getTime(), // 5m : 5, 20m : 20, 1h : 60, 6h : 360, 1d : 1440, 2d : 2880
 					nYMin: 0, nYMax: 10000,
 					nZMin: 0, nZMax: 5,
 					nBubbleSize: 3,
@@ -62,44 +62,67 @@
 					}
 				});
 				
+				var bDrawOnceAll = false,
+					nInterval = 2000;
+
 				var htDataSource = {
-						fUrl : function(nCallCount) {
-							if(nCallCount === 0) {
+						sUrl : function(nFetchIndex) {
+							if(nFetchIndex === 0) {
 								return "http://114.111.41.36:8080/getLastScatterData.hippo";	
 							} else {
 								return "http://114.111.41.36:8080/getScatterData.hippo";
 							}							
 						},
-						fData : function(nCallCount, htFetchedData) {
+						htParam : function(nFetchIndex, htLastFetchParam, htLastFetchedData) {
 							// calculate parameter
 							var htData;
-							if(nCallCount === 0 || typeof(htFetchedData) === 'undefined'){
+							if(nFetchIndex === 0 || typeof(htLastFetchParam) === 'undefined' || typeof(htLastFetchedData) === 'undefined'){
 								htData = {
-									'application' : 'apigw-c',
-									'period' : 172800000,
-									'limit' : 5000
+									'application' : 'apigw-t',
+									'period' : (5 * 60 * 1000),
+									'limit' : 500
 								};
 							}else{
-								htData = {
-									'application' : 'apigw-c',
-									'from' : htFetchedData.scatter[htFetchedData.scatter.length - 1].x + 1,
-									'to' : date.getTime(),
-									'limit' : 5000
-								};
+								if (bDrawOnceAll || htLastFetchedData.scatter.length == 0) {
+									htData = {
+										'application' : 'apigw-t',
+										'from' : htLastFetchParam.to + 1,
+										'to' : htLastFetchParam.to + 2000,
+										'limit' : 500
+									};
+								} else {
+									htData = {
+										'application' : 'apigw-t',
+										'from' : htLastFetchedData.scatter[htLastFetchedData.scatter.length - 1].x + 1,
+										'to' : date.getTime(),
+										'limit' : 500
+									};
+								}
 							}
 							return htData;
 						},
-						fFetch : function(htFetchedData) {
-							if (htFetchedData.scatter.length != 0) {
-								return true;
-							} else {
-								return false;
+						nFetch : function(htLastFetchParam, htLastFetchedData) {
+							// -1 : stop, n = 0 : immediately, n > 0 : interval
+							var useInterval = true;
+
+							if (useInterval && htLastFetchedData.scatter.length == 0){
+								bDrawOnceAll = true;
+								return nInterval;
 							}
 
-							if (htFetchedData.scatter[htFetchedData.scatter.length - 1].x < date.getTime()) {
-								return true;
-							}					
-							return false;
+							if(htLastFetchedData.scatter.length != 0){
+								return 0;
+							}
+
+							if (htLastFetchedData.scatter[htLastFetchedData.scatter.length - 1] &&
+								htLastFetchedData.scatter[htLastFetchedData.scatter.length - 1].x < date.getTime()) {
+								if (useInterval) {
+									bDrawOnceAll = true;
+									return nInterval;
+								}
+								return 0;
+							}
+							return -1;
 						},
 						htOption : {
 							dataType : 'jsonp',
@@ -108,9 +131,6 @@
 					};
 
 				oScatterChart.drawWithDataSource(htDataSource);
-				// oScatterChart.drawWithDataSourceInRealtime({
-
-				// }, 10000);
 				// oScatterChart.stopRealtime();
 
 			}
