@@ -376,8 +376,9 @@ var BigScatterChart = $.Class({
 		var self = this;
 		_.each(this._htwelTypeLi, function(welTypeLi, sKey){
 			welTypeLi.css( 'cursor', 'pointer')
-				.click(function(){
-					this._htwelChartCanvas[sKey].toggle();
+				.click(function(e){
+					e.preventDefault();
+					self._htwelChartCanvas[sKey].toggle();
 					if(!welTypeLi.hasClass('strike')){
 						welTypeLi.addClass('strike')
 						welTypeLi.css('text-decoration', 'line-through');					
@@ -385,7 +386,8 @@ var BigScatterChart = $.Class({
 						welTypeLi.removeClass('strike')
 						welTypeLi.css('text-decoration', 'none');
 					};
-				}.bind(this));
+
+				});
 		}, this);
 
 		var sDragToSelectClassName = this.option('sDragToSelectClassName');
@@ -787,7 +789,6 @@ var BigScatterChart = $.Class({
 		}else{
 			this._hideNoData();
 		}
-		console.log('addBubbleAndMoveAndDraw', nXMax, this._nXMax);
 		if(nXMax > this._nXMax){
 			var nXGap = nXMax - this._nXMax;
 			var nX = nXGap + this._nXMin;
@@ -887,7 +888,7 @@ var BigScatterChart = $.Class({
 
 		var aVisibleType = [];
 		_.each(this._htwelTypeLi, function(welTypeLi, sKey){
-			if(welTypeLi.css( 'text-decoration') == 'none'){
+			if(welTypeLi.css('text-decoration') == 'none'){
 				aVisibleType.push(sKey);
 			}
 		}, this);
@@ -895,9 +896,9 @@ var BigScatterChart = $.Class({
 		// console.time('getDataByXY');
 		// 열심히 성능 개선하려 시도하였지만, 그닥 빨라지지 않는다, 오히려 약간 오래 걸림 -_-;;
 		for(var i=0, nLen=aBubbleStep.length; i<nLen; i++){
-			if(nXFrom <= aBubbleStep[i].nXMin && nXTo >= aBubbleStep[i].nXMax
-				&& nYFrom <= aBubbleStep[i].nYMin && nYTo >= aBubbleStep[i].nYMax){ // xFrom -- min ======= max ---- nTo
-				aData = aData.concat(aBubbles[i]);
+			// if(nXFrom <= aBubbleStep[i].nXMin && nXTo >= aBubbleStep[i].nXMax
+			// 	&& nYFrom <= aBubbleStep[i].nYMin && nYTo >= aBubbleStep[i].nYMax){ // xFrom -- min ======= max ---- nTo
+			// 	aData = aData.concat(aBubbles[i]);
 			// }else if(nXFrom >= aBubbleStep[i].nXMin && nXFrom <= aBubbleStep[i].nXMax){ // min ----- xFrom ====== max
 			// 	for(var j=0, nLen2=aBubbleStep[i].nLength; j<nLen2; j++){
 			// 		if(aBubbles[i][j].x >= nXFrom && aBubbles[i][j].x <= nXTo){ // 같은 시간대가 여러개 나올 수 있지만 처음꺼 기준.
@@ -943,7 +944,7 @@ var BigScatterChart = $.Class({
 			// 	}else{
 			// 		break;
 			// 	}
-			}else{
+			// }else{
 				for(var j=0, nLen2=aBubbleStep[i].nLength; j<nLen2; j++){
 					if(aBubbles[i][j].x >= nXFrom && aBubbles[i][j].x <= nXTo
 						&& aBubbles[i][j].y >= nYFrom && aBubbles[i][j].y <= nYTo
@@ -951,7 +952,7 @@ var BigScatterChart = $.Class({
 						aData.push(aBubbles[i][j]);
 					}
 				}	
-			}
+			// }
 		}
 		// console.timeEnd('getDataByXY');
 		return aData;
@@ -1119,11 +1120,11 @@ var BigScatterChart = $.Class({
 		htOption.url = htDataSource.sUrl.call(this, this._nCallCount);
 		htOption.data = htDataSource.htParam.call(this, this._nCallCount, this._htLastFechedParam, this._htLastFetchedData);
 		htOption.success = function(htData){
-			console.log(htData.scatter.length, htOption.data);
 			if(htData.scatter.length > 0){
 				self.addBubbleAndMoveAndDraw(htData.scatter, htData.scatter[htData.scatter.length - 1].x);
-				console.log('length > 0', htData.scatter, htData.scatter[htData.scatter.length - 1].x)
 				self._htLastFetchedData = htData;
+			}else{
+				self._htLastFetchedData = {};
 			}
 			/* for testing
 			else{
@@ -1139,7 +1140,7 @@ var BigScatterChart = $.Class({
 					], self._nXMax + 1000)
 			}*/
 			htDataSource = self.option('htDataSource'); // refresh
-			var nInterval = htDataSource.nFetch.call(this, this._htLastFechedParam, htData);
+			var nInterval = htDataSource.nFetch.call(this, self._htLastFechedParam, htData);
 			if(nInterval > -1){
 				setTimeout(function(){
 					self._drawWithDataSource();

@@ -63,43 +63,43 @@
 				});
 				
 				var htDataSource = {
-						fUrl : function(nCallCount) {
-							if(nCallCount === 0) {
+						sUrl : function(nFetchIndex) {
+							if(nFetchIndex === 0) {
 								return "http://114.111.41.36:8080/getLastScatterData.hippo";	
 							} else {
 								return "http://114.111.41.36:8080/getScatterData.hippo";
 							}							
 						},
-						fData : function(nCallCount, htFetchedData) {
+						htParam : function(nFetchIndex, htLastFetchParam, htLastFetchedData) {
 							// calculate parameter
 							var htData;
-							if(nCallCount === 0 || typeof(htFetchedData) === 'undefined'){
+							if(nFetchIndex === 0 || typeof(htLastFetchParam) === 'undefined' || typeof(htLastFetchedData) === 'undefined'){
 								htData = {
-									'application' : 'apigw-c',
+									'application' : 'apigw-t',
 									'period' : 172800000,
 									'limit' : 5000
 								};
 							}else{
 								htData = {
-									'application' : 'apigw-c',
-									'from' : htFetchedData.scatter[htFetchedData.scatter.length - 1].x + 1,
+									'application' : 'apigw-t',
+									'from' : htLastFetchedData.scatter[htLastFetchedData.scatter.length - 1].x + 1,
 									'to' : date.getTime(),
 									'limit' : 5000
 								};
 							}
 							return htData;
 						},
-						fFetch : function(htFetchedData) {
-							if (htFetchedData.scatter.length != 0) {
-								return true;
-							} else {
-								return false;
+						nFetch : function(htLastFetchParam, htLastFetchedData) {
+							console.log('htLastFetchParam', htLastFetchParam)
+							if (htLastFetchedData.scatter.length != 0) {
+								return 0;
 							}
 
-							if (htFetchedData.scatter[htFetchedData.scatter.length - 1].x < date.getTime()) {
-								return true;
+							if (htLastFetchedData.scatter[htLastFetchedData.scatter.length - 1] &&
+								htLastFetchedData.scatter[htLastFetchedData.scatter.length - 1].x < date.getTime()) {
+								return 0;
 							}					
-							return false;
+							return -1;
 						},
 						htOption : {
 							dataType : 'jsonp',
