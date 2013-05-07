@@ -730,8 +730,8 @@ var BigScatterChart = $.Class({
 
 		//this._oChartCtx.lineWidth = 1;
 		for(var i = 0, nLen = aBubbles.length; i < nLen && !this._bDestroied; i++) {
-			var x = this._parseXDataToXChart(aBubbles[i].x),
-				y = this._parseYDataToYChart(aBubbles[i].y),
+			var x = this._parseXDataToXChart(this._checkXMinMax(aBubbles[i].x)),
+				y = this._parseYDataToYChart(this._checkYMinMax(aBubbles[i].y)),
 				r = this._parseZDataToZChart(aBubbles[i].r || nDefaultRadius),
 				a = aBubbles[i].y / this._nYMax * 0.7,
 				sThisType = aBubbles[i].type;
@@ -747,6 +747,26 @@ var BigScatterChart = $.Class({
 			
 			aBubbles[i].realx = x; aBubbles[i].realy = y; aBubbles[i].realz = r;
 		}		
+	},
+
+	_checkXMinMax : function(nX){
+		if(nX < this._nXMin){
+			return this._nXMin;
+		}else if(nX > this._nXMax){
+			return this._nXMax;
+		}else{
+			return nX;
+		}
+	},
+
+	_checkYMinMax : function(nY){
+		if(nY < this._nYMin){
+			return this._nYMin;
+		}else if(nY > this._nYMax){
+			return this._nYMax;
+		}else{
+			return nY;
+		}
 	},
 
 	_parseXDataToXChart : function(nX){
