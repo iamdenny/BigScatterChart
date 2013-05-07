@@ -24,11 +24,20 @@
 		<div style="padding-left:100px">
 			<div id="chart1"></div>
 			<button onclick="oScatterChart.destroy()">Destory</button>
-			<a href="" download="BigScatterChart.png" onclick="oScatterChart.saveAsPNG(this)">Save as PNG</a>
-			<a href="" download="BigScatterChart.jpg" onclick="oScatterChart.saveAsJPEG(this)">Save as JPEG</a>
+			<a id="png-down" href="" download="BigScatterChart.png">Save as PNG</a>
+			<a id="jpg-down" href="" download="BigScatterChart.jpg">Save as JPEG</a>
 		</div>
 
 		<script type="text/javascript">
+			$('#png-down').click(function(e){
+				var sImageUrl = oScatterChart.getChartAsPNG();
+				$(this).attr('href', sImageUrl);
+			});
+			$('#jpg-down').click(function(e){
+				var sImageUrl = oScatterChart.getChartAsJPEG();
+				$(this).attr('href', sImageUrl);
+			});
+
 			var date = new Date();
 			if(Modernizr.canvas){
 				doBigScatterChart();
