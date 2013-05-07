@@ -61,6 +61,11 @@
 					},
 					sXLabel : '(time)',
 					sYLabel : '(ms)',
+					htGuideLine : {
+						'nLineWidth' : 1,
+						'aLineDash' : [0],
+						'nGlobalAlpha' : 0.2
+					},
 					fOnSelect : function(htPosition, htXY){
 						console.log('fOnSelect', htPosition, htXY);
 						console.time('fOnSelect');
