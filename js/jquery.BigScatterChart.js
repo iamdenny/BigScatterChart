@@ -314,6 +314,14 @@ var BigScatterChart = $.Class({
 					'padding' : '0',
 					'color' : htType[sKey]
 				})
+				.hover(
+					function(){
+						$(this).css('cursor', 'move');
+					},
+					function(){
+						$(this).css('cursor', 'auto');
+					}
+				)
 				.text(sKey + ' : ')
 				.append(
 					this._htwelTypeSpan[sKey] = $('<span>')
