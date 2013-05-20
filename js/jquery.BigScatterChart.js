@@ -1,3 +1,12 @@
+/**
+ * Big Scatter Chart
+ * @class BigScatterChart 
+ * @version 1.2.3
+ * @since May 20, 2013
+ * @author Denny Lim<hello@iamdenny.com, iamdenny@nhn.com>
+ * @license MIT License
+ * @copyright 2013 NHN Corp.
+ */
 var BigScatterChart = $.Class({
 	$init : function(htOption){
 		this.option({
@@ -43,6 +52,7 @@ var BigScatterChart = $.Class({
 				'line-height': '20px',
 				'height': '20px',
 			},
+			'sShowLoading' : 'Loading',
 			'sShowNoData' : 'No Data',
 			'htShowNoDataStyle' : {
 				'font-size' : '15px',
@@ -62,7 +72,7 @@ var BigScatterChart = $.Class({
 			'fYAxisFormat' : function(nYStep, i){
 				return this._addComma((this._nYMax + this._nYMin) - ((nYStep*i) + this._nYMin));
 			},
-			htDataSource : {
+			'htDataSource' : {
 				sUrl : function(){},
 				htParam : function(htFetchedData){},
 				nFetch : function(htFetchedData){},
@@ -1061,13 +1071,6 @@ var BigScatterChart = $.Class({
 			}else{
 				oCtx.drawImage(this._oCheckedBoxImage, nX, nY);
 			}
-			// if(welTypeLi.hasClass('unchecked')){
-			// 	oCtx.moveTo(nX, nY + welTypeLi.height()/2);
-				// oCtx.lineTo(nX + welTypeLi.width(), nY + welTypeLi.height()/2);
-				// oCtx.strokeStyle = welTypeLi.css('color');
-				// oCtx.lineWidth = 0.7;
-				// oCtx.stroke();
-			// }	
 		}, this);		
 
 		// title
@@ -1170,6 +1173,7 @@ var BigScatterChart = $.Class({
 		htOption.data = htDataSource.htParam.call(this, this._nCallCount, this._htLastFechedParam, this._htLastFetchedData);
 		htOption.success = function(htData){
 			if(htData.scatter.length > 0){
+				self._hideNoData();
 				self.addBubbleAndMoveAndDraw(htData.scatter, htData.scatter[htData.scatter.length - 1].x);
 				self._htLastFetchedData = htData;
 			}else{
@@ -1194,9 +1198,15 @@ var BigScatterChart = $.Class({
 				setTimeout(function(){
 					self._drawWithDataSource();
 				}, nInterval);
+			}else if(this._aBubbles.length === 0){
+				self._showNoData();
+				self._welShowNoData.text(self.option('sShowNoData'));
 			}
 		}
 		this._oAjax = $.ajax(htOption);	
+		if(this._nCallCount === 0){
+			this._welShowNoData.text(this.option('sShowLoading'));
+		}
 		this._nCallCount += 1;
 		this._htLastFechedParam = htOption.data;
 	},
