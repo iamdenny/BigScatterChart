@@ -321,7 +321,9 @@ var BigScatterChart = $.Class({
 				'top' : '5px',
 				'right' : nPaddingRight + 'px',
 				'list-style' : 'none',
-				'font-size' : '12px'
+				'font-size' : '12px',
+				'padding' : '0',
+				'margin' :'0'
 			});
 		this._htwelTypeLi = {};
 		this._htwelTypeSpan = {};
@@ -333,6 +335,7 @@ var BigScatterChart = $.Class({
 					'display' : 'inline-block',
 					'margin' : '0 0 0 20px',
 					'padding' : '0 0 0 16px',
+					'line-height' : '15px',
 					'color' : htType[sKey],
 					'background-image' : 'url(' + htCheckBoxImage.checked + ')',
 					'background-repeat' : 'no-repeat',
@@ -384,6 +387,10 @@ var BigScatterChart = $.Class({
 		this._resetTypeCount();
 
 		// title
+		var htTypeUlOffset = this._welTypeUl.offset(),
+			htOverlayOffset = this._welOverlay.offset(),
+			nLeftGap = htTypeUlOffset.left - htOverlayOffset.left;
+		
 		var sTitle = this.option('sTitle'),
 			htTitleStyle = this.option('htTitleStyle');
 		if(_.isString(sTitle) && sTitle.length > 0){
@@ -392,8 +399,12 @@ var BigScatterChart = $.Class({
 									.css({
 										'position' : 'absolute',
 										'vertical-align' : 'middle',
-										'top': '12px',
-										'left': nPaddingLeft + 'px'
+										'top': '5px',
+										'left': '5px',
+										'width' : nLeftGap - 5 + 'px',
+										'overflow' : 'hidden',
+										'white-space' : 'nowrap',
+										'text-overflow' : 'ellipsis'
 									})
 									.css(htTitleStyle)
 			);
@@ -403,7 +414,7 @@ var BigScatterChart = $.Class({
 		var nCenterOfWidth = nWidth / 2,
 			nMiddleOfHeight = nHeight / 2,
 			nConfigLayerWidth = 200,
-			nConfigLayerHeight = 150,
+			nConfigLayerHeight = 130,
 			sYMin = sPrefix + 'ymin',
 			sYMax = sPrefix + 'ymax';
 		
@@ -419,7 +430,7 @@ var BigScatterChart = $.Class({
 								.attr('src', sConfigImage)
 								.css({
 									'position' : 'absolute',
-									'top' : '15px',
+									'top' : '6px',
 									'right' : '5px',
 									'cursor' : 'pointer',
 									'z-index' : nZIndexForCanvas++
