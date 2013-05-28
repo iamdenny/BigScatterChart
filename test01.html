@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>sortable demo</title>
+  <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
+  <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+  <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+</head>
+<body>
+
+<div id="aaa"> 
+	<ul id="sortable">
+	  <li>Item 1</li>
+	  <li>Item 2</li>
+	  <li>Item 3</li>
+	  <li>Item 4</li>
+	  <li>Item 5</li>
+	</ul>
+</div>
+<button id="btn">버</button>
+
+<script>$("#sortable").sortable();</script>
+<script>
+	$('#btn').click(function(){
+		var html = $('#aaa').html();
+		$('#aaa').empty();
+		
+		setTimeout(function(){
+			$('#aaa').append(html);
+			/* $("#sortable").sortable('destroy'); */
+			$("#sortable").sortable();
+		}, 1000);
+	});
+</script>
+</body>
+</html>
