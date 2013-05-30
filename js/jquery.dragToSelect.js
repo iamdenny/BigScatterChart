@@ -47,7 +47,16 @@ $('#jquery-drag-to-select-example').dragToSelect({
 });
 ***/
 jQuery.fn.dragToSelect = function (conf) {
+	if(config === 'destroy'){
+		parent.unbind('mousedown', onMouseDown);
+		jQuery(document).unbind('mousemove', onMouseMove);
+		jQuery(document).unbind('mouseup', onMouseUp);
+		return;
+	}
+	
 	var c = typeof(conf) == 'object' ? conf : {};
+	
+
 
 	// Config
 	var config = jQuery.extend({
@@ -337,9 +346,10 @@ jQuery.fn.dragToSelect = function (conf) {
 	// 	parent.disableTextSelect();
 	// }
 
-	var bIsDraging = false;
+	var bIsDraging = false,
+		onMouseDown, onMouseMove, onMouseUp;
 	parent
-		.mousedown(function (e) {
+		.mousedown(onMouseDown = function (e) {
 			// Make sure user isn't clicking scrollbar (or disallow clicks far to the right actually)
 			if ((e.pageX + 20) > jQuery(document.body).width()) {
 				return;
@@ -351,7 +361,7 @@ jQuery.fn.dragToSelect = function (conf) {
 
 			e.preventDefault();
 		});
-	jQuery(document).mousemove(function (e) {
+	jQuery(document).mousemove(onMouseMove = function (e) {
 			if(!bIsDraging) return;
 			refreshSelectBox(e);
 
@@ -365,7 +375,7 @@ jQuery.fn.dragToSelect = function (conf) {
 
 			e.preventDefault();
 		})
-		.mouseup(function (e) {
+		.mouseup(onMouseUp = function (e) {
 			if(!bIsDraging) return;
 			if (config.selectables) {			
 				selectElementsInRange();

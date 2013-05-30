@@ -3549,7 +3549,6 @@ $.widget("ui.sortable", $.ui.mouse, {
 
 		//We're ready to go
 		this.ready = true;
-console.log('_create');
 	},
 
 	_destroy: function() {
@@ -3560,7 +3559,6 @@ console.log('_create');
 		for ( var i = this.items.length - 1; i >= 0; i-- ) {
 			this.items[i].item.removeData(this.widgetName + "-item");
 		}
-console.log('_destroy');
 		return this;
 	},
 
@@ -3579,7 +3577,6 @@ console.log('_destroy');
 		var currentItem = null,
 			validHandle = false,
 			that = this;
-console.log('_mouseCapture');
 		if (this.reverting) {
 			return false;
 		}
@@ -3623,7 +3620,6 @@ console.log('_mouseCapture');
 	},
 
 	_mouseStart: function(event, overrideHandle, noActivation) {
-console.log('_mouseStart');
 		var i, body,
 			o = this.options;
 
@@ -3760,7 +3756,6 @@ console.log('_mouseStart');
 		var i, item, itemElement, intersection,
 			o = this.options,
 			scrolled = false;
-console
 		//Compute the helpers position
 		this.position = this._generatePosition(event);
 		this.positionAbs = this._convertPositionTo("absolute");

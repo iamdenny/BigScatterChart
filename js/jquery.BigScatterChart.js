@@ -1,8 +1,8 @@
 /**
  * Big Scatter Chart
  * @class BigScatterChart 
- * @version 1.3.2
- * @since May 28, 2013
+ * @version 1.3.3
+ * @since May 29, 2013
  * @author Denny Lim<hello@iamdenny.com, iamdenny@nhn.com>
  * @license MIT License
  * @copyright 2013 NHN Corp.
@@ -357,7 +357,6 @@ var BigScatterChart = $.Class({
 			this._awelChartCanvasInOrder.push(welChartCanvas);
 		}, this);
 		this._welTypeUl.mousedown(function(e){
-			console.log('ul mousedown');
 			e.stopPropagation();
 			//e.preventDefault();
 		});
@@ -366,12 +365,10 @@ var BigScatterChart = $.Class({
 			containment: "document",
     		placeholder: sPrefix + 'placeholder',
 			start : function(event, ui){
-				console.log('start');
 				$('.bigscatterchart-placeholder').append('<span>&nbsp;</span>');
 				ui.item.startIndex = ui.item.index();
 			},
 			stop : function(event,ui){
-				console.log('stop');
 				var nZIndexForCanvas = self.option('nZIndexForCanvas');
         		var nStart = ui.item.startIndex,
         			nStop = ui.item.index();
@@ -383,24 +380,6 @@ var BigScatterChart = $.Class({
         		for(var i=0, nLen=self._awelChartCanvasInOrder.length; i<nLen; i++){
         			self._awelChartCanvasInOrder[i].css('z-index', nZIndexForCanvas+i);
         		}
-			},
-			activate : function(e, ui){
-				console.log('activate');
-			},
-			deactivate : function(e, ui){
-				console.log('deactivate');
-			},
-			create : function(e, ui){
-				console.log('create');
-			},
-			remove : function(e, ui){
-				console.log('remove');
-			},
-			update : function(e, ui){
-				console.log('update');
-			},
-			sort : function(e, ui){
-				console.log('sort');
 			}
 		});
 
@@ -534,15 +513,16 @@ var BigScatterChart = $.Class({
 		this._welOverlay.dragToSelect({
 			className: sDragToSelectClassName,
 		    onHide: function (welSelectBox) {
-		    	var htPosition = self._adjustSelectBoxForChart(welSelectBox),
-		        	htXY = self._parseCoordinatesToXY(htPosition);
+		    	self._adjustSelectBoxForChart(welSelectBox, function(htPosition){
+	    			htXY = self._parseCoordinatesToXY(htPosition);
+	    			
+	    			self._welSelectBox = welSelectBox;
 
-		        self._welSelectBox = welSelectBox;
-
-				var fOnSelect = self.option('fOnSelect');
-				if(_.isFunction(fOnSelect)){
-					fOnSelect.call(self, htPosition, htXY);
-				}
+					var fOnSelect = self.option('fOnSelect');
+					if(_.isFunction(fOnSelect)){
+						fOnSelect.call(self, htPosition, htXY);
+					}
+	    		});
 		    }
 		});
 	},
@@ -580,7 +560,7 @@ var BigScatterChart = $.Class({
 		}
 	},
 
-	_adjustSelectBoxForChart : function(welSelectBox){
+	_adjustSelectBoxForChart : function(welSelectBox, cb){
 		var nPaddingTop = this.option('nPaddingTop'),
 			nPaddingLeft = this.option('nPaddingLeft'),
 			nPaddingBottom = this.option('nPaddingBottom'),
@@ -604,18 +584,21 @@ var BigScatterChart = $.Class({
     	if(nTop < nMinTop) { nTop = nMinTop; }
     	if(nBottom > nMaxBottom) { nBottom = nMaxBottom; }
 
-    	welSelectBox.animate({
-    		'left' : nLeft,
-    		'width' : nRight - nLeft,
-    		'top' : nTop,
-    		'height' : nBottom - nTop
-    	}, 200);
+    	var self = this;
     	var htPosition = {
     		'nLeft' : nLeft,
     		'nWidth' : nRight - nLeft,
     		'nTop' : nTop,
     		'nHeight' : nBottom - nTop
     	}
+    	welSelectBox.animate({
+    		'left' : nLeft,
+    		'width' : nRight - nLeft,
+    		'top' : nTop,
+    		'height' : nBottom - nTop
+    	}, 200, function(){
+    		if(_.isFunction(cb)) cb.call(self, htPosition);
+    	});
     	return htPosition;
 	},
 
@@ -1149,8 +1132,9 @@ var BigScatterChart = $.Class({
 	
 	_unbindAllEvents : function(){
 		this._welTypeUl.sortable('destroy');
+		this._welOverlay.dragToSelect('destroy');
 		// this is for drag-selecting. it should be unbinded.
-		jQuery(document).unbind('mousemove').unbind('mouseup');
+//		jQuery(document).unbind('mousemove').unbind('mouseup');
 	},
 
 	_mergeAllDisplay : function(fCb){

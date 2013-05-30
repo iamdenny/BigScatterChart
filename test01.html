@@ -18,7 +18,8 @@
 	  <li>Item 5</li>
 	</ul>
 </div>
-<button id="btn">버</button>
+<button id="btn">Destroy and create</button>
+<button id="unbind">Unbind</button>
 
 <script>$("#sortable").sortable();</script>
 <script>
@@ -32,6 +33,9 @@
 			$("#sortable").sortable();
 		}, 1000);
 	});
+	$('#unbind').click(function(){
+		jQuery(document).unbind('mousemove').unbind('mouseup');
+	})
 </script>
 </body>
 </html>
