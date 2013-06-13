@@ -1,8 +1,8 @@
 /**
  * Big Scatter Chart
  * @class BigScatterChart 
- * @version 1.3.3
- * @since May 29, 2013
+ * @version 1.3.4
+ * @since June 13, 2013
  * @author Denny Lim<hello@iamdenny.com, iamdenny@nhn.com>
  * @license MIT License
  * @copyright 2013 NHN Corp.
