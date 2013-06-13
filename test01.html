@@ -9,7 +9,7 @@
 </head>
 <body>
 
-<div id="aaa"> 
+<div id="container"> 
 	<ul id="sortable">
 	  <li>Item 1</li>
 	  <li>Item 2</li>
@@ -23,15 +23,15 @@
 
 <script>$("#sortable").sortable();</script>
 <script>
+	var html = $('#container').html();
 	$('#btn').click(function(){
-		var html = $('#aaa').html();
-		$('#aaa').empty();
-		
+		$("#sortable").sortable('destroy');
+		$('#container').empty();
 		setTimeout(function(){
-			$('#aaa').append(html);
-			/* $("#sortable").sortable('destroy'); */
+			$('#container').append(html);
+			
 			$("#sortable").sortable();
-		}, 1000);
+		}, 500);
 	});
 	$('#unbind').click(function(){
 		jQuery(document).unbind('mousemove').unbind('mouseup');

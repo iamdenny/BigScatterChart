@@ -1031,7 +1031,7 @@ var BigScatterChart = $.Class({
 
 		var aVisibleType = [];
 		_.each(this._htwelTypeLi, function(welTypeLi, sKey){
-			if(welTypeLi.css('text-decoration') == 'none'){
+			if(welTypeLi.hasClass('unchecked') === false){
 				aVisibleType.push(sKey);
 			}
 		}, this);
