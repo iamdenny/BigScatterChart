@@ -62,9 +62,11 @@
 					sYLabel : '(ms)',
 					htGuideLine : {
 						'nLineWidth' : 1,
-						'aLineDash' : [0],
+						'aLineDash' : [2, 5],
 						'nGlobalAlpha' : 0.2
 					},
+					sXLabel : '',
+					nPaddingRight : 5,
 					fOnSelect : function(htPosition, htXY){
 						console.log('fOnSelect', htPosition, htXY);
 						console.time('fOnSelect');

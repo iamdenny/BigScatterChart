@@ -1,7 +1,7 @@
 /**
  * Big Scatter Chart
  * @class BigScatterChart 
- * @version 1.3.4
+ * @version 1.3.5
  * @since June 13, 2013
  * @author Denny Lim<hello@iamdenny.com, iamdenny@nhn.com>
  * @license MIT License
@@ -22,8 +22,8 @@ var BigScatterChart = $.Class({
 			'nXLabel': null,
 			'nYLabel': null,
 			'nBubbleSize': 10,
-			'nPaddingTop' : 40,
-			'nPaddingRight' : 40,
+			'nPaddingTop' : 30,
+			'nPaddingRight' : 20,
 			'nPaddingBottom' : 30,
 			'nPaddingLeft' : 50,
 			'sLineColor' : '#000',			
@@ -317,7 +317,7 @@ var BigScatterChart = $.Class({
 			.css({
 				'position' : 'absolute',
 				'top' : '5px',
-				'right' : nPaddingRight + 'px',
+				'right' : nPaddingRight + 20 + 'px',
 				'list-style' : 'none',
 				'font-size' : '12px',
 				'padding' : '0',
@@ -495,7 +495,6 @@ var BigScatterChart = $.Class({
 		var htCheckBoxImage = this.option('htCheckBoxImage');
 		_.each(this._htwelTypeLi, function(welTypeLi, sKey){
 			welTypeLi.click(function(e){
-				console.log('li click')
 				e.preventDefault();
 				self._htwelChartCanvas[sKey].toggle();
 				if(!welTypeLi.hasClass('unchecked')){
@@ -649,7 +648,8 @@ var BigScatterChart = $.Class({
 	  	this._oGuideCtx.lineWidth = htGuideLine.nLineWidth;
 		this._oGuideCtx.globalAlpha = htGuideLine.nGlobalAlpha;	
 		if ( this._oGuideCtx.setLineDash !== undefined )   this._oGuideCtx.setLineDash(htGuideLine.aLineDash);
-		if ( this._oGuideCtx.mozDash !== undefined )       this._oGuideCtx.mozDash = htGuideLine.aLineDash;		  	
+		if ( this._oGuideCtx.mozDash !== undefined )       this._oGuideCtx.mozDash = htGuideLine.aLineDash;
+		if ( this._oGuideCtx.webkitLineDash !== undefined) this._oGuideCtx.webkitLineDash = htGuideLine.aLineDash;
 
 		var nXStep = this._nXWork / this._nXSteps;
 		var nYStep = this._nYWork / this._nYSteps;
