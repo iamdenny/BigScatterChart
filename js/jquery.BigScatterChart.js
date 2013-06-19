@@ -1,8 +1,8 @@
 /**
  * Big Scatter Chart
  * @class BigScatterChart 
- * @version 1.3.5
- * @since June 13, 2013
+ * @version 1.3.6
+ * @since June 19, 2013
  * @author Denny Lim<hello@iamdenny.com, iamdenny@nhn.com>
  * @license MIT License
  * @copyright 2013 NHN Corp.
@@ -511,17 +511,16 @@ var BigScatterChart = $.Class({
 		var sDragToSelectClassName = this.option('sDragToSelectClassName');
 		this._welOverlay.dragToSelect({
 			className: sDragToSelectClassName,
-		    onHide: function (welSelectBox) {
-		    	self._adjustSelectBoxForChart(welSelectBox, function(htPosition){
-	    			htXY = self._parseCoordinatesToXY(htPosition);
-	    			
-	    			self._welSelectBox = welSelectBox;
-
-					var fOnSelect = self.option('fOnSelect');
-					if(_.isFunction(fOnSelect)){
-						fOnSelect.call(self, htPosition, htXY);
-					}
-	    		});
+		    onHide: function (welSelectBox) {		    	
+		    	var htPosition = self._adjustSelectBoxForChart(welSelectBox),
+    	            htXY = self._parseCoordinatesToXY(htPosition);
+    	
+    	            self._welSelectBox = welSelectBox;
+    	
+    	        var fOnSelect = self.option('fOnSelect');
+    	        if(_.isFunction(fOnSelect)){
+    	          fOnSelect.call(self, htPosition, htXY);
+    	        }
 		    }
 		});
 	},
